@@ -1,16 +1,22 @@
 package frgp.utn.edu.app_padresprimerizos
 
-class Vacuna {
-    private var idVacuna: Int = 0
-    private var nombre: String = ""
-    private var edadAplicacion: Int = 0
+import java.util.Date
 
-    fun getIdVacuna(): Int = idVacuna
-    fun setIdVacuna(idVacuna: Int) { this.idVacuna = idVacuna }
+class Bebe {
+    private var idBebe: Int = 0
+    private var idUsuario: Int = 0
+    private var nombre: String = ""
+    private var fechaNacimiento: Date? = null
+
+    fun getIdBebe(): Int = idBebe
+    fun setIdBebe(idBebe: Int) { this.idBebe = idBebe }
+
+    fun getIdUsuario(): Int = idUsuario
+    fun setIdUsuario(idUsuario: Int) { this.idUsuario = idUsuario }
 
     fun getNombre(): String = nombre
     fun setNombre(nombre: String) { this.nombre = nombre }
 
-    fun getEdadAplicacion(): Int = edadAplicacion
-    fun setEdadAplicacion(edadAplicacion: Int) { this.edadAplicacion = edadAplicacion }
+    fun getFechaNacimiento(): Date? = fechaNacimiento
+    fun setFechaNacimiento(fechaNacimiento: Date?) { this.fechaNacimiento = fechaNacimiento }
 }
