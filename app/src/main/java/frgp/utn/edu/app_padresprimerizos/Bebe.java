@@ -1,12 +1,12 @@
 package frgp.utn.edu.app_padresprimerizos;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Bebe {
     private int idBebe;
     private int idUsuario;
     private String nombre = "";
-    private Date fechaNacimiento;
+    private LocalDate fechaNacimiento;
 
     public int getIdBebe() { return idBebe; }
     public void setIdBebe(int idBebe) { this.idBebe = idBebe; }
@@ -17,6 +17,6 @@ public class Bebe {
     public String getNombre() { return nombre; }
     public void setNombre(String nombre) { this.nombre = nombre; }
 
-    public Date getFechaNacimiento() { return fechaNacimiento; }
-    public void setFechaNacimiento(Date fechaNacimiento) { this.fechaNacimiento = fechaNacimiento; }
+    public LocalDate getFechaNacimiento() { return fechaNacimiento; }
+    public void setFechaNacimiento(LocalDate fechaNacimiento) { this.fechaNacimiento = fechaNacimiento; }
 }
