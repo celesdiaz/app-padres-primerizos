@@ -81,4 +81,24 @@ public class ServicioDAO {
         return db.update(TABLA, valores, COL_ID + " = ?", new String[]{id});
     }
 
+    public Servicio obtenerPorId(int idServicio){
+        SQLiteDatabase db = helper.getReadableDatabase();
+
+        Servicio servicio = null;
+        Cursor cursor = db.query(TABLA, null, COL_ID + " = ?",
+                new String[]{String.valueOf(idServicio)}, null, null, null);
+
+        if (cursor.moveToFirst()) {
+            servicio = new Servicio();
+            servicio.setIdServicio(cursor.getInt(cursor.getColumnIndexOrThrow(COL_ID)));
+            servicio.setTipo(TipoServicio.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(COL_TIPO))));
+            servicio.setNombre(cursor.getString(cursor.getColumnIndexOrThrow(COL_NOMBRE)));
+            servicio.setUbicacion(cursor.getString(cursor.getColumnIndexOrThrow(COL_UBICACION)));
+            servicio.setTelefono(cursor.getString(cursor.getColumnIndexOrThrow(COL_TELEFONO)));
+            servicio.setHorario(cursor.getString(cursor.getColumnIndexOrThrow(COL_HORARIO)));
+        }
+        cursor.close();
+        return servicio;
+    }
+
 }
