@@ -9,14 +9,13 @@ import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
+import dao.ServicioDAO;
 import java.util.ArrayList;
 
 import adapter.ListViewDirectorioAdapter;
 
 public class DirectorioFragment extends Fragment {
 
-    private ArrayList<Servicio> lista = new ArrayList<>();
     private ListView listView;
 
     public DirectorioFragment(){
@@ -41,24 +40,28 @@ public class DirectorioFragment extends Fragment {
         View vista = inflater.inflate(R.layout.fragment_directorio, container, false);
         listView = vista.findViewById(R.id.listViewServicios);
 
-        cargarServiciosDePrueba();
+        ServicioDAO dao = new ServicioDAO(requireContext());
+
+        ArrayList<Servicio> lista = dao.getListaDeServicios();
+        if (lista.isEmpty()) {
+            cargarServiciosDePrueba(dao);
+            lista = dao.getListaDeServicios();
+        }
 
         ListViewDirectorioAdapter adapter = new ListViewDirectorioAdapter(requireContext(), lista);
         listView.setAdapter(adapter);
-
         return vista;
     }
 
-    private void cargarServiciosDePrueba() {
-        lista.add(crearServicio(1, TipoServicio.FARMACIA, "Farmacia San Martín", "San Martín 450", "11 4455-1234", "8 a 22 hs"));
-        lista.add(crearServicio(2, TipoServicio.PEDIATRIA, "Dra. Ferreyra", "Belgrano 120", "11 4455-5678", "Lun a Vie 9 a 17 hs"));
-        lista.add(crearServicio(3, TipoServicio.GUARDERIA, "Jardín Arco Iris", "Mitre 880", "11 4455-9012", "7 a 18 hs"));
-        lista.add(crearServicio(4, TipoServicio.PANALERA, "Pañalera Bebé Feliz", "Sarmiento 310", "11 4455-3456", "9 a 20 hs"));
+    private void cargarServiciosDePrueba(ServicioDAO dao) {
+        dao.insertarServicios(crearServicio(TipoServicio.FARMACIA, "Farmacia San Martín", "San Martín 450", "11 4455-1234", "8 a 22 hs"));
+        dao.insertarServicios(crearServicio(TipoServicio.PEDIATRIA, "Dra. Ferreyra", "Belgrano 120", "11 4455-5678", "Lun a Vie 9 a 17 hs"));
+        dao.insertarServicios(crearServicio(TipoServicio.GUARDERIA, "Jardín Arco Iris", "Mitre 880", "11 4455-9012", "7 a 18 hs"));
+        dao.insertarServicios(crearServicio(TipoServicio.PANALERA, "Pañalera Bebé Feliz", "Sarmiento 310", "11 4455-3456", "9 a 20 hs"));
     }
 
-    private Servicio crearServicio(int id, TipoServicio tipo, String nombre, String ubicacion, String telefono, String horario) {
+    private Servicio crearServicio(TipoServicio tipo, String nombre, String ubicacion, String telefono, String horario) {
         Servicio servicio = new Servicio();
-        servicio.setIdServicio(id);
         servicio.setTipo(tipo);
         servicio.setNombre(nombre);
         servicio.setUbicacion(ubicacion);
