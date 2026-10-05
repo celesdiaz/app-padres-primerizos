@@ -41,12 +41,12 @@ public class Principal extends AppCompatActivity {
     private Fragment crearFragment(int itemId) {
         if (itemId == R.id.nav_inicio) {
             return new InicioFragment();
-        } else if (itemId == R.id.nav_calendario) {
-            return PlaceholderFragment.nuevo("Calendario (Integrante A)");
+        } else if (itemId == R.id.nav_guardias) {
+            return PlaceholderFragment.nuevo("Guardias (Integrante B)");
         } else if (itemId == R.id.nav_servicios) {
-            return PlaceholderFragment.nuevo("Servicios (Integrante B)");
+            return new DirectorioFragment();
         } else {
-            return PlaceholderFragment.nuevo("Contactos (Integrante C)");
+            return PlaceholderFragment.nuevo("Mi bebé (Integrante A)");
         }
     }
 

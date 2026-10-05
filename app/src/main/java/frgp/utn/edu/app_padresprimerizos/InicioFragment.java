@@ -46,11 +46,11 @@ public class InicioFragment extends Fragment {
         view.findViewById(R.id.btn_sos).setOnClickListener(v -> mostrarPendiente("SOS"));
 
         // Accesos rápidos
-        view.findViewById(R.id.btn_calendario).setOnClickListener(v -> irA(R.id.nav_calendario));
+        view.findViewById(R.id.btn_calendario).setOnClickListener(v -> irA(R.id.nav_mibebe));
         view.findViewById(R.id.btn_directorio).setOnClickListener(v -> irA(R.id.nav_servicios));
-        view.findViewById(R.id.btn_guardias).setOnClickListener(v -> irA(R.id.nav_servicios));
+        view.findViewById(R.id.btn_guardias).setOnClickListener(v -> irA(R.id.nav_guardias));
         view.findViewById(R.id.btn_favoritos).setOnClickListener(v -> irA(R.id.nav_servicios));
-        view.findViewById(R.id.btn_contactos).setOnClickListener(v -> irA(R.id.nav_contactos));
+        view.findViewById(R.id.btn_contactos).setOnClickListener(v -> irA(R.id.nav_mibebe));
 
         // Sección de administrador
         if (ROL_ADMIN.equals(rol)) {
