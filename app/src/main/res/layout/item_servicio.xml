@@ -1,70 +1,79 @@
-<com.google.android.material.card.MaterialCardView
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="16dp"
-    app:cardElevation="4dp">
+    android:paddingHorizontal="16dp"
+    android:paddingVertical="12dp">
 
-    <LinearLayout
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        app:cardBackgroundColor="?attr/colorSurfaceContainerLow"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="6dp"
+        app:strokeColor="?attr/colorOutlineVariant"
+        app:strokeWidth="1dp">
 
-
-        <TextView
-            android:id="@+id/nombreListView"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/design_default_color_primary"
-            android:layout_marginLeft="5dp"
-            android:text="TextView"
-            android:textSize="14sp"/>
+            android:orientation="vertical"
+            android:padding="16dp">
 
-        <TextView
-            android:id="@+id/tipoListView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/design_default_color_primary"
-            android:layout_marginLeft="5dp"
-            android:text="TextView" />
+            <TextView
+                android:id="@+id/nombreListView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nombre"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/ubicacionListView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/design_default_color_primary"
-            android:layout_marginLeft="5dp"
-            android:text="TextView" />
+            <TextView
+                android:id="@+id/tipoListView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="Tipo"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/horarioListView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/design_default_color_primary"
-            android:layout_marginLeft="5dp"
-            android:text="TextView" />
+            <TextView
+                android:id="@+id/ubicacionListView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ubicación"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textSize="14sp" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="4dp"
-            android:background="#E0E0E0" />
+            <TextView
+                android:id="@+id/horarioListView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Horario"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textSize="14sp" />
 
-        <Button
-            android:id="@+id/btnVerUbicacion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Ver ubicación"
-            android:focusable="false" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="4dp"
+                android:background="?attr/colorOutlineVariant" />
 
-    </LinearLayout>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnVerUbicacion"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:text="Ver ubicación"
+                android:textColor="?attr/colorPrimary" />
 
-</com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
 
+    </com.google.android.material.card.MaterialCardView>
 
-
-
+</FrameLayout>
