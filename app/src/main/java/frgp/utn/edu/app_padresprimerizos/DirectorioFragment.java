@@ -50,6 +50,19 @@ public class DirectorioFragment extends Fragment {
 
         ListViewDirectorioAdapter adapter = new ListViewDirectorioAdapter(requireContext(), lista);
         listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            Servicio servicio = adapter.getItem(position);
+            Bundle args = new Bundle();
+            args.putInt("idServicio", servicio.getIdServicio());
+
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .setReorderingAllowed(true)
+                    .replace(R.id.contenedor_fragments, FichaServicioFragment.class, args)
+                    .addToBackStack(null)
+                    .commit();
+        });
         return vista;
     }
 
