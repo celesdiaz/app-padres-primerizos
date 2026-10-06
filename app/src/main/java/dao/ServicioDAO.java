@@ -101,4 +101,31 @@ public class ServicioDAO {
         return servicio;
     }
 
+    public ArrayList<Servicio> buscar(TipoServicio tipo) {
+        SQLiteDatabase db = helper.getReadableDatabase();
+        ArrayList<Servicio> lista = new ArrayList<>();
+
+        Cursor cursor;
+        if (tipo == null) {
+            cursor = db.query(TABLA, null, null, null, null, null, COL_NOMBRE + " ASC");
+        } else {
+            cursor = db.query(TABLA, null, COL_TIPO + " = ?",
+                    new String[]{tipo.name()}, null, null, COL_NOMBRE + " ASC");
+        }
+
+        while (cursor.moveToNext()) {
+            Servicio s = new Servicio();
+            s.setIdServicio(cursor.getInt(cursor.getColumnIndexOrThrow(COL_ID)));
+            s.setTipo(TipoServicio.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(COL_TIPO))));
+            s.setNombre(cursor.getString(cursor.getColumnIndexOrThrow(COL_NOMBRE)));
+            s.setUbicacion(cursor.getString(cursor.getColumnIndexOrThrow(COL_UBICACION)));
+            s.setTelefono(cursor.getString(cursor.getColumnIndexOrThrow(COL_TELEFONO)));
+            s.setHorario(cursor.getString(cursor.getColumnIndexOrThrow(COL_HORARIO)));
+            lista.add(s);
+        }
+
+        cursor.close();
+        return lista;
+    }
+
 }
