@@ -4,8 +4,10 @@
 
     <queries>
         <package android:name="com.google.android.apps.maps" />
+
         <intent>
             <action android:name="android.intent.action.DIAL" />
+
             <data android:scheme="tel" />
         </intent>
     </queries>
@@ -30,6 +32,10 @@
         </activity>
         <activity
             android:name=".RegistroActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".LoginActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
     </application>
