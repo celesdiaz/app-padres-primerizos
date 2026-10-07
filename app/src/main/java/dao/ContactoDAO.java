@@ -16,7 +16,6 @@ public class ContactoDAO {
     private static final String COL_ID_USUARIO = "id_usuario";
     private static final String COL_NOMBRE = "nombre";
     private static final String COL_TELEFONO = "telefono";
-    // La columna de la BD sigue llamándose "relacion" (no hace falta tocar OpenHelper)
     private static final String COL_TIPO_CONTACTO = "relacion";
     private static final String COL_PRINCIPAL = "principal";
     private OpenHelper helper;
