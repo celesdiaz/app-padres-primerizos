@@ -5,7 +5,7 @@ public class Contacto {
     private int idUsuario;
     private String nombre = "";
     private String telefono = "";
-    private String relacion = "";
+    private String tipoContacto = "";
     private boolean principal;
 
     public int getIdContacto() { return idContacto; }
@@ -20,8 +20,8 @@ public class Contacto {
     public String getTelefono() { return telefono; }
     public void setTelefono(String telefono) { this.telefono = telefono; }
 
-    public String getRelacion() { return relacion; }
-    public void setRelacion(String relacion) { this.relacion = relacion; }
+    public String getTipoContacto() { return tipoContacto; }
+    public void setTipoContacto(String tipoContacto) { this.tipoContacto = tipoContacto; }
 
     public boolean isPrincipal() { return principal; }
     public void setPrincipal(boolean principal) { this.principal = principal; }

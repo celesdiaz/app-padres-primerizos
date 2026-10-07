@@ -16,4 +16,8 @@
         android:id="@+id/nav_mibebe"
         android:icon="@drawable/ic_mibebe"
         android:title="Mi bebé" />
+    <item
+        android:id="@+id/nav_contactos"
+        android:icon="@drawable/ic_contactos"
+        android:title="Contactos" />
 </menu>

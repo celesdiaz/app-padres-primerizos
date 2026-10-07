@@ -45,6 +45,8 @@ public class Principal extends AppCompatActivity {
             return PlaceholderFragment.nuevo("Guardias (Integrante B)");
         } else if (itemId == R.id.nav_servicios) {
             return new DirectorioFragment();
+        } else if (itemId == R.id.nav_contactos) {
+            return new ContactosFragment();
         } else {
             return PlaceholderFragment.nuevo("Mi bebé (Integrante A)");
         }
