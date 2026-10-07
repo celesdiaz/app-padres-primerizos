@@ -2,6 +2,7 @@ package frgp.utn.edu.app_padresprimerizos;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Toast;
 
@@ -39,8 +40,46 @@ public class LoginActivity extends AppCompatActivity {
         usuarioDAO = new UsuarioDAO(this);
     }
 
+
+
+    public boolean validaciones()
+    {
+        boolean estado = true;
+
+        edtEmailLogin.setError(null);
+        edtContrasenaLogin.setError(null);
+
+        if(edtEmailLogin.getText().toString().trim().isEmpty())
+        {
+            edtEmailLogin.setError("Completar email");
+            estado = false;
+        }
+        else
+        {
+            if(!Patterns.EMAIL_ADDRESS.matcher(edtEmailLogin.getText().toString().trim()).matches())
+            {
+                edtEmailLogin.setError("Correo invalido");
+                estado = false;
+            }
+        }
+
+        if(edtContrasenaLogin.getText().toString().trim().isEmpty())
+        {
+            edtContrasenaLogin.setError("Ingresar contraseña");
+            estado = false;
+        }
+
+        return estado;
+    }
+
+
     public void iniciarSesion(View view)
     {
+        if(!validaciones())
+        {
+            return;
+        }
+
         String emailLogin = edtEmailLogin.getText().toString().trim();
         String contrasenaLogin = edtContrasenaLogin.getText().toString().trim();
 
