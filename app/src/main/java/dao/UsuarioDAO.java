@@ -2,6 +2,7 @@ package dao;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import OpenHelper.OpenHelper;
@@ -35,5 +36,26 @@ public class UsuarioDAO {
         return db.insert(TABLA, null, valores);
     }
 
+
+    public int iniciarSesion(Usuario usuario)
+    {
+        SQLiteDatabase db = helper.getReadableDatabase();
+
+        String emailLogin = usuario.getEmail();
+        String contrasenaLogin = usuario.getContrasena();
+        String query = "SELECT id_usuario FROM Usuarios " + "WHERE email = '" + emailLogin + "' " + "AND contrasena = '" + contrasenaLogin + "' ";
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        int idUsuario = -1;
+
+        if(cursor.moveToFirst())
+        {
+            idUsuario = cursor.getInt(cursor.getColumnIndexOrThrow(COL_ID));
+        }
+        cursor.close();
+
+        return idUsuario;
+    }
 
 }
