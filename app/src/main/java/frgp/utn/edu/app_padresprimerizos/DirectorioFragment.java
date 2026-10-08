@@ -68,6 +68,8 @@ public class DirectorioFragment extends Fragment {
         adapter = new ListViewDirectorioAdapter(requireContext(), lista);
         listView.setAdapter(adapter);
 
+        listView.setEmptyView(vista.findViewById(R.id.tvSinResultados));
+
         listView.setOnItemClickListener((parent, view, position, id) -> {
             Servicio servicio = adapter.getItem(position);
             Bundle args = new Bundle();
