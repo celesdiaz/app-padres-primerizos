@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import OpenHelper.OpenHelper;
+import frgp.utn.edu.app_padresprimerizos.Rol;
 import frgp.utn.edu.app_padresprimerizos.Usuario;
 
 public class UsuarioDAO {
@@ -43,7 +44,7 @@ public class UsuarioDAO {
 
         String emailLogin = usuario.getEmail();
         String contrasenaLogin = usuario.getContrasena();
-        String query = "SELECT id_usuario FROM Usuarios " + "WHERE email = '" + emailLogin + "' " + "AND contrasena = '" + contrasenaLogin + "' ";
+        String query = "SELECT id_usuario, nombre, rol FROM Usuarios " + "WHERE email = '" + emailLogin + "' " + "AND contrasena = '" + contrasenaLogin + "' ";
 
         Cursor cursor = db.rawQuery(query, null);
 
@@ -52,6 +53,11 @@ public class UsuarioDAO {
         if(cursor.moveToFirst())
         {
             idUsuario = cursor.getInt(cursor.getColumnIndexOrThrow(COL_ID));
+            usuario.setIdUsuario(idUsuario);
+
+            usuario.setNombre(cursor.getString(cursor.getColumnIndexOrThrow(COL_NOMBRE)));
+
+            usuario.setRol(Rol.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(COL_ROL))));
         }
         cursor.close();
 

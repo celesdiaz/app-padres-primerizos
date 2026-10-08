@@ -1,6 +1,8 @@
 package frgp.utn.edu.app_padresprimerizos;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
@@ -92,8 +94,14 @@ public class LoginActivity extends AppCompatActivity {
 
         if (idUsuario != -1)
         {
+            SharedPreferences preferences = getSharedPreferences("sesion", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putInt("id_usuario", idUsuario);
+            editor.putString("nombre", usuario.getNombre());
+            editor.putString("rol", usuario.getRol().name());
+            editor.apply();
+
             Intent intent = new Intent(LoginActivity.this, Principal.class);
-            intent.putExtra("idUsuario", idUsuario);
             startActivity(intent);
         }
         else
