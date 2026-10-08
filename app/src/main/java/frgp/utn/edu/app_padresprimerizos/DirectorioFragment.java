@@ -1,9 +1,12 @@
 package frgp.utn.edu.app_padresprimerizos;
 
 import android.os.Bundle;
+
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -13,7 +16,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.material.chip.ChipGroup;
+
+import com.google.android.material.textfield.TextInputEditText;
+
+import android.widget.TextView;
 
 import dao.ServicioDAO;
 import java.util.ArrayList;
@@ -24,6 +30,9 @@ public class DirectorioFragment extends Fragment {
 
     private ListView listView;
     private Spinner spinner;
+    private TextInputEditText etBuscador;
+    private ServicioDAO dao;
+    private ListViewDirectorioAdapter adapter;
 
     public DirectorioFragment(){
 
@@ -46,8 +55,9 @@ public class DirectorioFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View vista = inflater.inflate(R.layout.fragment_directorio, container, false);
         listView = vista.findViewById(R.id.listViewServicios);
+        etBuscador = vista.findViewById(R.id.etBuscador);
 
-        ServicioDAO dao = new ServicioDAO(requireContext());
+        dao = new ServicioDAO(requireContext());
 
         ArrayList<Servicio> lista = dao.getListaDeServicios();
         if (lista.isEmpty()) {
@@ -55,7 +65,7 @@ public class DirectorioFragment extends Fragment {
             lista = dao.getListaDeServicios();
         }
 
-        ListViewDirectorioAdapter adapter = new ListViewDirectorioAdapter(requireContext(), lista);
+        adapter = new ListViewDirectorioAdapter(requireContext(), lista);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener((parent, view, position, id) -> {
@@ -82,14 +92,24 @@ public class DirectorioFragment extends Fragment {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
-                adapter.clear();
-                adapter.addAll(dao.buscar(tipoSeleccionado(position)));
+                actualizarLista();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) { }
         });
 
+        etBuscador.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                boolean handled = false;
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    actualizarLista();
+                    handled = true;
+                }
+                return handled;
+            }
+        });
 
         return vista;
     }
@@ -109,6 +129,13 @@ public class DirectorioFragment extends Fragment {
         servicio.setTelefono(telefono);
         servicio.setHorario(horario);
         return servicio;
+    }
+    private void actualizarLista() {
+        TipoServicio tipo = tipoSeleccionado(spinner.getSelectedItemPosition());
+        String texto = etBuscador.getText().toString();
+
+        adapter.clear();
+        adapter.addAll(dao.buscar(tipo, texto));
     }
 
     private TipoServicio tipoSeleccionado(int posicion) {

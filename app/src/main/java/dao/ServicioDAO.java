@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.text.TextUtils;
 
 import java.util.ArrayList;
 
@@ -101,17 +102,27 @@ public class ServicioDAO {
         return servicio;
     }
 
-    public ArrayList<Servicio> buscar(TipoServicio tipo) {
+    public ArrayList<Servicio> buscar(TipoServicio tipo, String texto) {
         SQLiteDatabase db = helper.getReadableDatabase();
         ArrayList<Servicio> lista = new ArrayList<>();
 
-        Cursor cursor;
-        if (tipo == null) {
-            cursor = db.query(TABLA, null, null, null, null, null, COL_NOMBRE + " ASC");
-        } else {
-            cursor = db.query(TABLA, null, COL_TIPO + " = ?",
-                    new String[]{tipo.name()}, null, null, COL_NOMBRE + " ASC");
+        ArrayList<String> condiciones = new ArrayList<>();
+        ArrayList<String> valores = new ArrayList<>();
+
+        if (tipo != null) {
+            condiciones.add(COL_TIPO + " = ?");
+            valores.add(tipo.name());
         }
+
+        if (texto != null && !texto.trim().isEmpty()) {
+            condiciones.add("(" + COL_UBICACION + " LIKE ? OR " + COL_NOMBRE + " LIKE ?)");
+            valores.add("%" + texto.trim() + "%");
+            valores.add("%" + texto.trim() + "%");
+        }
+        String filtroSql = condiciones.isEmpty() ? null : TextUtils.join(" AND ", condiciones);
+        String[] valoresFiltro = valores.isEmpty() ? null : valores.toArray(new String[0]);
+
+        Cursor cursor = db.query(TABLA, null, filtroSql, valoresFiltro, null, null, COL_NOMBRE + " ASC");
 
         while (cursor.moveToNext()) {
             Servicio s = new Servicio();
