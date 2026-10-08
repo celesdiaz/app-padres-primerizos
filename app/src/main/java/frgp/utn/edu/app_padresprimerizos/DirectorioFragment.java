@@ -4,11 +4,17 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.google.android.material.chip.ChipGroup;
+
 import dao.ServicioDAO;
 import java.util.ArrayList;
 
@@ -17,6 +23,7 @@ import adapter.ListViewDirectorioAdapter;
 public class DirectorioFragment extends Fragment {
 
     private ListView listView;
+    private Spinner spinner;
 
     public DirectorioFragment(){
 
@@ -63,6 +70,27 @@ public class DirectorioFragment extends Fragment {
                     .addToBackStack(null)
                     .commit();
         });
+
+        spinner = vista.findViewById(R.id.spinnerTipo);
+        String[] opciones = {"Todos", "Farmacia", "Pediatría", "Guardería", "Pañalera"};
+        ArrayAdapter<String> adapterTipo = new ArrayAdapter<>(requireContext(),
+                                                                android.R.layout.simple_spinner_item,
+                                                                opciones);
+        adapterTipo.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapterTipo);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
+                adapter.clear();
+                adapter.addAll(dao.buscar(tipoSeleccionado(position)));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) { }
+        });
+
+
         return vista;
     }
 
@@ -81,5 +109,15 @@ public class DirectorioFragment extends Fragment {
         servicio.setTelefono(telefono);
         servicio.setHorario(horario);
         return servicio;
+    }
+
+    private TipoServicio tipoSeleccionado(int posicion) {
+        switch (posicion) {
+            case 1: return TipoServicio.FARMACIA;
+            case 2: return TipoServicio.PEDIATRIA;
+            case 3: return TipoServicio.GUARDERIA;
+            case 4: return TipoServicio.PANALERA;
+            default: return null;   // 0 = "Todos"
+        }
     }
 }
