@@ -42,7 +42,7 @@ public class Principal extends AppCompatActivity {
         if (itemId == R.id.nav_inicio) {
             return new InicioFragment();
         } else if (itemId == R.id.nav_guardias) {
-            return PlaceholderFragment.nuevo("Guardias (Integrante B)");
+            return new GuardiasFragment();
         } else if (itemId == R.id.nav_servicios) {
             return new DirectorioFragment();
         } else if (itemId == R.id.nav_contactos) {
