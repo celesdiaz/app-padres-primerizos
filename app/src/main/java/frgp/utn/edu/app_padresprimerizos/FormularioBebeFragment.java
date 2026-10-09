@@ -2,6 +2,7 @@ package frgp.utn.edu.app_padresprimerizos;
 
 import android.os.Bundle;
 
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -13,7 +14,7 @@ import android.view.ViewGroup;
  * Use the {@link FormularioBebeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FormularioBebeFragment extends Fragment {
+public class FormularioBebeFragment extends DialogFragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
