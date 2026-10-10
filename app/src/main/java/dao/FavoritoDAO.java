@@ -75,6 +75,7 @@ public class FavoritoDAO {
 
         Cursor scursor = db.rawQuery(sql, new String[]{String.valueOf(idUsuario)});
 
+
         if (scursor.moveToFirst()) {
             do {
                 Servicio s = new Servicio();

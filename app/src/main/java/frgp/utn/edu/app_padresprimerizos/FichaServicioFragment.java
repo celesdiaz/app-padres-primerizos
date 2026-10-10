@@ -1,6 +1,8 @@
 package frgp.utn.edu.app_padresprimerizos;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -9,9 +11,11 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import dao.FavoritoDAO;
 import dao.ServicioDAO;
 
 
@@ -79,6 +83,28 @@ public class FichaServicioFragment extends Fragment {
                 startActivity(mapIntent);
             } else {
                 Toast.makeText(requireContext(), "Google Maps no está instalado", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        SharedPreferences prefs = requireContext().getSharedPreferences("sesion", Context.MODE_PRIVATE);
+        int idUsuario = prefs.getInt("id_usuario", -1);
+        int idServicio = servicio.getIdServicio();
+
+        FavoritoDAO favoritoDAO = new FavoritoDAO(requireContext());
+        ImageButton btnFavorito = vista.findViewById(R.id.btnFavorito);
+
+        //corre al abrir la ficha
+        if (favoritoDAO.esFavorito(idUsuario, idServicio)) {
+            btnFavorito.setImageResource(R.drawable.ic_star_relleno);
+        }
+
+        btnFavorito.setOnClickListener(v -> {
+            if (favoritoDAO.esFavorito(idUsuario, idServicio)) {
+                favoritoDAO.quitar(idUsuario, idServicio);
+                btnFavorito.setImageResource(R.drawable.ic_star_borde);
+            } else {
+                favoritoDAO.agregar(idUsuario, idServicio);
+                btnFavorito.setImageResource(R.drawable.ic_star_relleno);
             }
         });
 
