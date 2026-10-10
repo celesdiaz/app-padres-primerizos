@@ -19,7 +19,7 @@ public class InicioFragment extends Fragment {
     private static final String PREFS = "sesion";
     private static final String KEY_NOMBRE = "nombre";
     private static final String KEY_ROL = "rol";
-    private static final String ROL_ADMIN = "ADMIN";
+    private static final String ROL_ADMIN = "ADMINISTRADOR";
 
     @Nullable
     @Override
