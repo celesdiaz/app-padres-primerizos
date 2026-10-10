@@ -49,7 +49,13 @@ public class InicioFragment extends Fragment {
         view.findViewById(R.id.btn_calendario).setOnClickListener(v -> irA(R.id.nav_mibebe));
         view.findViewById(R.id.btn_directorio).setOnClickListener(v -> irA(R.id.nav_servicios));
         view.findViewById(R.id.btn_guardias).setOnClickListener(v -> irA(R.id.nav_guardias));
-        view.findViewById(R.id.btn_favoritos).setOnClickListener(v -> irA(R.id.nav_servicios));
+        view.findViewById(R.id.btn_favoritos).setOnClickListener(v ->
+                requireActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .setReorderingAllowed(true)
+                        .replace(R.id.contenedor_fragments, new FavoritosFragment())
+                        .addToBackStack(null)
+                        .commit());
         view.findViewById(R.id.btn_contactos).setOnClickListener(v -> irA(R.id.nav_contactos));
 
         // Sección de administrador
