@@ -44,6 +44,7 @@ public class FormularioBebeFragment extends DialogFragment {
         edtFechaNacimiento.setOnClickListener(v -> mostrarCalendarioBebe());
 
         btnGuardarBebe = view.findViewById(R.id.btn_guardar_bebe);
+        btnGuardarBebe.setOnClickListener(v -> guardarBebe());
 
         btnCancelarBebe = view.findViewById(R.id.btn_cancelar_bebe);
 
@@ -70,6 +71,51 @@ public class FormularioBebeFragment extends DialogFragment {
         calendario.getDatePicker().setMaxDate(System.currentTimeMillis());
 
         calendario.show();
+    }
+
+    private void guardarBebe()
+    {
+        String nombre = edtNombreBebe.getText().toString().trim();
+
+        if(nombre.isEmpty())
+        {
+            edtNombreBebe.setError("Ingrese el nombre del bebé");
+            return;
+        }
+        if(FechaNacimientoSeleccionada == null)
+        {
+            edtFechaNacimiento.setError("Seleccione la fecha de nacimiento");
+            return;
+        }
+
+        SharedPreferences preferences = requireContext().getSharedPreferences("sesion", Context.MODE_PRIVATE);
+        int idUsuario = preferences.getInt("id_usuario", -1);
+
+        if(idUsuario == -1)
+        {
+            Toast.makeText(requireContext(), "No se encontro la sesion", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Bebe bebe = new Bebe();
+
+        bebe.setIdUsuario(idUsuario);
+        bebe.setNombre(nombre);
+        bebe.setFechaNacimiento(FechaNacimientoSeleccionada);
+
+        BebeDAO bebeDAO = new BebeDAO(requireContext());
+        long resultado = bebeDAO.insertarBebe(bebe);
+
+        if(resultado != -1)
+        {
+            Toast.makeText(requireContext(), "El bebe fue registrado correctamente", Toast.LENGTH_SHORT).show();
+            dismiss();
+        }
+        else
+        {
+            Toast.makeText(requireContext(), "Error al registrar al bebe", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
 }
