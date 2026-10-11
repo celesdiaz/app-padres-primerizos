@@ -28,14 +28,27 @@ public class FormularioBebeFragment extends DialogFragment {
     private MaterialButton btnGuardarBebe;
     private MaterialButton btnCancelarBebe;
     private LocalDate FechaNacimientoSeleccionada;
+    private OnBebeGuardadoListener listener;
 
-    public FormularioBebeFragment() {
+    public interface OnBebeGuardadoListener
+    {
+        void onBebeGuardado();
+    }
+
+    public void setOnBebeGuardadoListener(OnBebeGuardadoListener listener)
+    {
+        this.listener = listener;
+    }
+
+    public FormularioBebeFragment()
+    {
 
     }
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
         View view = inflater.inflate(R.layout.fragment_formulario_bebe, container, false);
 
         edtNombreBebe = view.findViewById(R.id.edt_nombre_bebe);
@@ -44,6 +57,7 @@ public class FormularioBebeFragment extends DialogFragment {
         edtFechaNacimiento.setOnClickListener(v -> mostrarCalendarioBebe());
 
         btnGuardarBebe = view.findViewById(R.id.btn_guardar_bebe);
+
         btnGuardarBebe.setOnClickListener(v -> guardarBebe());
 
         btnCancelarBebe = view.findViewById(R.id.btn_cancelar_bebe);
@@ -72,6 +86,7 @@ public class FormularioBebeFragment extends DialogFragment {
 
         calendario.show();
     }
+
 
     private void guardarBebe()
     {
@@ -109,6 +124,10 @@ public class FormularioBebeFragment extends DialogFragment {
         if(resultado != -1)
         {
             Toast.makeText(requireContext(), "El bebe fue registrado correctamente", Toast.LENGTH_SHORT).show();
+            if(listener != null)
+            {
+                listener.onBebeGuardado();
+            }
             dismiss();
         }
         else

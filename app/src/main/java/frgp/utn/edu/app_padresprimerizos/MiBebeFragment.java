@@ -39,7 +39,6 @@ public class MiBebeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_mi_bebe, container, false);
 
         btnAgregarBebe = view.findViewById(R.id.btn_agregar_bebe);
-
         recyclerView = view.findViewById(R.id.recycler_bebes);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
@@ -50,6 +49,15 @@ public class MiBebeFragment extends Fragment {
         {
             FormularioBebeFragment formulario = new FormularioBebeFragment();
 
+            formulario.setOnBebeGuardadoListener(
+                    new FormularioBebeFragment.OnBebeGuardadoListener() {
+                        @Override
+                        public void onBebeGuardado() {
+                            cargarBebes();
+                        }
+                    }
+            );
+
             formulario.show(
                     getParentFragmentManager(),
                     "FormularioBebe"
@@ -58,6 +66,7 @@ public class MiBebeFragment extends Fragment {
 
         return view;
     }
+
 
     private void cargarBebes()
     {
