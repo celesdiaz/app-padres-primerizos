@@ -47,8 +47,10 @@ public class Principal extends AppCompatActivity {
             return new DirectorioFragment();
         } else if (itemId == R.id.nav_contactos) {
             return new ContactosFragment();
+        } else if(itemId == R.id.nav_mibebe){
+            return new MiBebeFragment();
         } else {
-            return PlaceholderFragment.nuevo("Mi bebé (Integrante A)");
+            return PlaceholderFragment.nuevo("Pantalla no disponible");
         }
     }
 
