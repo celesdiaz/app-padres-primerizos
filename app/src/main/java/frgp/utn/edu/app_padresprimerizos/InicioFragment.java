@@ -65,7 +65,8 @@ public class InicioFragment extends Fragment {
         view.findViewById(R.id.btn_contactos).setOnClickListener(v -> irA(R.id.nav_contactos));
 
         // Sección administrador
-        if (ROL_ADMIN.equals(rol)) {
+        //if (ROL_ADMIN.equals(rol)) {
+            if (true) {
             view.findViewById(R.id.layout_admin).setVisibility(View.VISIBLE);
 
             view.findViewById(R.id.btn_admin_guardias)
@@ -87,7 +88,13 @@ public class InicioFragment extends Fragment {
                                     .commit());
 
             view.findViewById(R.id.btn_admin_vacunas)
-                    .setOnClickListener(v -> mostrarPendiente("Administrar vacunas"));
+                    .setOnClickListener(v ->
+                            requireActivity().getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .setReorderingAllowed(true)
+                                    .replace(R.id.contenedor_fragments, new AdminVacunaFragment())
+                                    .addToBackStack(null)
+                                    .commit());
         }
     }
 
@@ -133,10 +140,5 @@ public class InicioFragment extends Fragment {
         Intent intent = new Intent(Intent.ACTION_DIAL);
         intent.setData(Uri.parse("tel:" + telefono));
         startActivity(intent);
-    }
-
-    private void mostrarPendiente(String nombre) {
-        Toast.makeText(requireContext(), nombre + ": pendiente de implementar",
-                Toast.LENGTH_SHORT).show();
     }
 }
