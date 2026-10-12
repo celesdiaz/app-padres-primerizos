@@ -54,6 +54,7 @@ public class FormularioControlMedicoFragment extends DialogFragment {
 
         edtDescripcionControl = view.findViewById(R.id.edt_descripcion_control);
         btnGuardarControl = view.findViewById(R.id.btn_guardar_control);
+        btnGuardarControl.setOnClickListener(v -> guardarControlMedico());
 
         btnCancelarControl = view.findViewById(R.id.btn_cancelar_control);
 
@@ -86,5 +87,46 @@ public class FormularioControlMedicoFragment extends DialogFragment {
         calendario.show();
     }
 
+
+
+    private void guardarControlMedico()
+    {
+        String descripcion = edtDescripcionControl.getText().toString().trim();
+
+        if(descripcion.isEmpty())
+        {
+            edtDescripcionControl.setError("Ingrese una descripción");
+            return;
+        }
+        if(fechaControlSeleccionada == null)
+        {
+            edtFechaControl.setError("Seleccione la fecha de control médico");
+            return;
+        }
+
+
+        Recordatorio recordatorio = new Recordatorio();
+
+        recordatorio.setIdBebe(bebe.getIdBebe());
+        recordatorio.setIdVacuna(null);
+        recordatorio.setTipo(TipoRecordatorio.CONTROL_MEDICO);
+        recordatorio.setFecha(fechaControlSeleccionada);
+        recordatorio.setDescripcion(descripcion);
+        recordatorio.setEstado(EstadoRecordatorio.PENDIENTE);
+
+        RecordatorioDAO recordatorioDAO = new RecordatorioDAO(requireContext());
+        long resultado = recordatorioDAO.insertarRecordatorio(recordatorio);
+
+        if(resultado != -1)
+        {
+            Toast.makeText(requireContext(), "El control médico fue registrado correctamente", Toast.LENGTH_SHORT).show();
+            dismiss();
+        }
+        else
+        {
+            Toast.makeText(requireContext(), "Error al registrar el control médico", Toast.LENGTH_SHORT).show();
+        }
+
+    }
 
 }
