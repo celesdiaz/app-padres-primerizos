@@ -1,5 +1,6 @@
 package frgp.utn.edu.app_padresprimerizos;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
@@ -30,6 +31,7 @@ public class RegistroActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_registro);
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -43,107 +45,78 @@ public class RegistroActivity extends AppCompatActivity {
         edtConfirmar = findViewById(R.id.edt_confirmar);
 
         usuarioDAO = new UsuarioDAO(this);
-
     }
 
-    public boolean validaciones()
-        {
-            boolean estado = true;
+    public boolean validaciones() {
+        boolean estado = true;
 
-            edtNombre.setError(null);
-            edtApellido.setError(null);
-            edtEmail.setError(null);
-            edtContrasena.setError(null);
-            edtConfirmar.setError(null);
+        edtNombre.setError(null);
+        edtApellido.setError(null);
+        edtEmail.setError(null);
+        edtContrasena.setError(null);
+        edtConfirmar.setError(null);
 
-            if(edtNombre.getText().toString().trim().isEmpty())
-            {
-                edtNombre.setError("Campo requerido");
+        if (edtNombre.getText().toString().trim().isEmpty()) {
+            edtNombre.setError("Campo requerido");
+            estado = false;
+        } else {
+            if (edtNombre.getText().toString().trim().length() < 3) {
+                edtNombre.setError("Minimo 3 caracteres");
                 estado = false;
             }
-            else
-            {
-                if(edtNombre.getText().toString().trim().length() < 3)
-                {
-                    edtNombre.setError("Minimo 3 caracteres");
-                    estado = false;
-                }
-            }
-
-            if(edtApellido.getText().toString().trim().isEmpty())
-            {
-                edtApellido.setError("Campo requerido");
-                estado = false;
-            }
-            else
-            {
-                if(edtApellido.getText().toString().trim().length() < 3)
-                {
-                    edtApellido.setError("Minimo 3 caracteres");
-                    estado = false;
-                }
-            }
-
-            if(edtEmail.getText().toString().trim().isEmpty())
-            {
-                edtEmail.setError("Campo requerido");
-                estado = false;
-            }
-            else
-            {
-                if(!Patterns.EMAIL_ADDRESS.matcher(edtEmail.getText().toString().trim()).matches())
-                {
-                    edtEmail.setError("Correo invalido");
-                    estado = false;
-                }
-            }
-
-
-            if(edtContrasena.getText().toString().trim().isEmpty())
-            {
-                edtContrasena.setError("Campo requerido");
-                estado = false;
-            }
-            else
-            {
-                if(edtContrasena.getText().toString().trim().length() < 6)
-                {
-                    edtContrasena.setError("Minimo 6 caracteres");
-                    estado = false;
-                }
-                else
-                {
-                    if(edtContrasena.getText().toString().contains(" "))
-                    {
-                        edtContrasena.setError("La contraseña no puede contener espacios");
-                        estado = false;
-                    }
-                }
-            }
-
-            if(edtConfirmar.getText().toString().trim().isEmpty())
-            {
-                edtConfirmar.setError("Campo requerido");
-                estado = false;
-            }
-            else
-            {
-                if(!edtContrasena.getText().toString().equals(edtConfirmar.getText().toString()))
-                {
-                    edtConfirmar.setError("Las contraseñas no coinciden");
-                    estado = false;
-                }
-            }
-
-            return estado;
-
         }
 
-    public void eventoRegistrar(View view)
-    {
+        if (edtApellido.getText().toString().trim().isEmpty()) {
+            edtApellido.setError("Campo requerido");
+            estado = false;
+        } else {
+            if (edtApellido.getText().toString().trim().length() < 3) {
+                edtApellido.setError("Minimo 3 caracteres");
+                estado = false;
+            }
+        }
 
-        if(!validaciones())
-        {
+        if (edtEmail.getText().toString().trim().isEmpty()) {
+            edtEmail.setError("Campo requerido");
+            estado = false;
+        } else {
+            if (!Patterns.EMAIL_ADDRESS.matcher(edtEmail.getText().toString().trim()).matches()) {
+                edtEmail.setError("Correo invalido");
+                estado = false;
+            }
+        }
+
+        if (edtContrasena.getText().toString().trim().isEmpty()) {
+            edtContrasena.setError("Campo requerido");
+            estado = false;
+        } else {
+            if (edtContrasena.getText().toString().trim().length() < 6) {
+                edtContrasena.setError("Minimo 6 caracteres");
+                estado = false;
+            } else {
+                if (edtContrasena.getText().toString().contains(" ")) {
+                    edtContrasena.setError("La contraseña no puede contener espacios");
+                    estado = false;
+                }
+            }
+        }
+
+        if (edtConfirmar.getText().toString().trim().isEmpty()) {
+            edtConfirmar.setError("Campo requerido");
+            estado = false;
+        } else {
+            if (!edtContrasena.getText().toString().equals(edtConfirmar.getText().toString())) {
+                edtConfirmar.setError("Las contraseñas no coinciden");
+                estado = false;
+            }
+        }
+
+        return estado;
+    }
+
+    public void eventoRegistrar(View view) {
+
+        if (!validaciones()) {
             return;
         }
 
@@ -153,7 +126,6 @@ public class RegistroActivity extends AppCompatActivity {
         String contrasena = edtContrasena.getText().toString().trim();
 
         Usuario usuario = new Usuario();
-
         usuario.setNombre(nombre);
         usuario.setApellido(apellido);
         usuario.setEmail(email);
@@ -161,12 +133,11 @@ public class RegistroActivity extends AppCompatActivity {
 
         long resultado = usuarioDAO.insertarUsuario(usuario);
 
-        if (resultado != -1)
-        {
+        if (resultado != -1) {
             Toast.makeText(this, "Usuario registrado correctamente", Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
+            startActivity(new Intent(RegistroActivity.this, LoginActivity.class));
+            finish();
+        } else {
             Toast.makeText(this, "No se pudo registrar el usuario", Toast.LENGTH_SHORT).show();
         }
     }
