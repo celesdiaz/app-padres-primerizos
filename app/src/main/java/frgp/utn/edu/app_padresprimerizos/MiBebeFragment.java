@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
 
@@ -83,6 +84,18 @@ public class MiBebeFragment extends Fragment {
         bebes = bebeDAO.obtenerBebesPorUsuario(idUsuario);
 
         bebeAdapter = new BebeAdapter(bebes);
+
+        bebeAdapter.SetOnRegistrarControlListener(
+                new BebeAdapter.OnRegistrarControlListener() {
+                    @Override
+                    public void onRegistrarControl(Bebe bebe) {
+                        FormularioControlMedicoFragment formulario = new FormularioControlMedicoFragment();
+                        formulario.setBebe(bebe);
+                        formulario.show(getParentFragmentManager(), "FormularioControlMedico");
+                    }
+                }
+        );
+
         recyclerView.setAdapter(bebeAdapter);
     }
 }

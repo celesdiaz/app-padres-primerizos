@@ -6,6 +6,8 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.button.MaterialButton;
+
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
@@ -15,6 +17,17 @@ import frgp.utn.edu.app_padresprimerizos.R;
 
 public class BebeAdapter extends RecyclerView.Adapter<BebeAdapter.BebeViewHolder> {
     private ArrayList<Bebe> bebes;
+    private OnRegistrarControlListener listener;
+
+    public interface OnRegistrarControlListener
+    {
+        void onRegistrarControl(Bebe bebe);
+    }
+
+    public void SetOnRegistrarControlListener(OnRegistrarControlListener listener)
+    {
+        this.listener = listener;
+    }
 
     public BebeAdapter(ArrayList<Bebe> bebes) {
         this.bebes = bebes;
@@ -56,6 +69,18 @@ public class BebeAdapter extends RecyclerView.Adapter<BebeAdapter.BebeViewHolder
         }
 
         holder.txtEdadBebe.setText(edadTexto);
+
+        holder.btnRegistrarControl.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(listener != null)
+                        {
+                            listener.onRegistrarControl(bebe);
+                        }
+                    }
+                }
+        );
     }
 
     @Override
@@ -65,12 +90,15 @@ public class BebeAdapter extends RecyclerView.Adapter<BebeAdapter.BebeViewHolder
 
     public static class BebeViewHolder extends RecyclerView.ViewHolder {
         TextView txtNombreBebe, txtEdadBebe, txtFechaBebe;
+        MaterialButton btnRegistrarControl;
 
         public BebeViewHolder(View itemView) {
             super(itemView);
             txtNombreBebe = itemView.findViewById(R.id.txt_nombre_bebe);
             txtEdadBebe = itemView.findViewById(R.id.txt_edad_bebe);
             txtFechaBebe = itemView.findViewById(R.id.txt_fecha_bebe);
+
+            btnRegistrarControl = itemView.findViewById(R.id.btn_registrar_control);
 
         }
     }
