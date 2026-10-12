@@ -27,6 +27,10 @@ public class ContactoDAO {
     public long insertarContacto(Contacto c, int idUsuario) {
         SQLiteDatabase db = helper.getWritableDatabase();
 
+        if (c.isPrincipal()) {
+            desmarcarPrincipal(idUsuario);
+        }
+
         ContentValues valores = new ContentValues();
         valores.put(COL_ID_USUARIO, idUsuario);
         valores.put(COL_NOMBRE, c.getNombre());
@@ -41,18 +45,27 @@ public class ContactoDAO {
         SQLiteDatabase db = helper.getReadableDatabase();
 
         ArrayList<Contacto> listaContactos = new ArrayList<>();
-        Cursor cursor = db.query(TABLA, null, COL_ID_USUARIO + " = ?",
-                new String[]{String.valueOf(idUsuario)}, null, null, COL_NOMBRE + " ASC");
+        Cursor cursor = db.query(
+                TABLA,
+                null,
+                COL_ID_USUARIO + " = ?",
+                new String[]{String.valueOf(idUsuario)},
+                null,
+                null,
+                COL_NOMBRE + " ASC"
+        );
 
         while (cursor.moveToNext()) {
             Contacto c = new Contacto();
             c.setIdContacto(cursor.getInt(cursor.getColumnIndexOrThrow(COL_ID)));
+            c.setIdUsuario(cursor.getInt(cursor.getColumnIndexOrThrow(COL_ID_USUARIO)));
             c.setNombre(cursor.getString(cursor.getColumnIndexOrThrow(COL_NOMBRE)));
             c.setTelefono(cursor.getString(cursor.getColumnIndexOrThrow(COL_TELEFONO)));
             c.setTipoContacto(cursor.getString(cursor.getColumnIndexOrThrow(COL_TIPO_CONTACTO)));
             c.setPrincipal(cursor.getInt(cursor.getColumnIndexOrThrow(COL_PRINCIPAL)) == 1);
             listaContactos.add(c);
         }
+
         cursor.close();
         return listaContactos;
     }
@@ -61,17 +74,55 @@ public class ContactoDAO {
         SQLiteDatabase db = helper.getReadableDatabase();
 
         Contacto contacto = null;
-        Cursor cursor = db.query(TABLA, null, COL_ID + " = ?",
-                new String[]{String.valueOf(idContacto)}, null, null, null);
+        Cursor cursor = db.query(
+                TABLA,
+                null,
+                COL_ID + " = ?",
+                new String[]{String.valueOf(idContacto)},
+                null,
+                null,
+                null
+        );
 
         if (cursor.moveToFirst()) {
             contacto = new Contacto();
             contacto.setIdContacto(cursor.getInt(cursor.getColumnIndexOrThrow(COL_ID)));
+            contacto.setIdUsuario(cursor.getInt(cursor.getColumnIndexOrThrow(COL_ID_USUARIO)));
             contacto.setNombre(cursor.getString(cursor.getColumnIndexOrThrow(COL_NOMBRE)));
             contacto.setTelefono(cursor.getString(cursor.getColumnIndexOrThrow(COL_TELEFONO)));
             contacto.setTipoContacto(cursor.getString(cursor.getColumnIndexOrThrow(COL_TIPO_CONTACTO)));
             contacto.setPrincipal(cursor.getInt(cursor.getColumnIndexOrThrow(COL_PRINCIPAL)) == 1);
         }
+
+        cursor.close();
+        return contacto;
+    }
+
+    public Contacto obtenerContactoPrincipal(int idUsuario) {
+        SQLiteDatabase db = helper.getReadableDatabase();
+
+        Contacto contacto = null;
+        Cursor cursor = db.query(
+                TABLA,
+                null,
+                COL_ID_USUARIO + " = ? AND " + COL_PRINCIPAL + " = ?",
+                new String[]{String.valueOf(idUsuario), "1"},
+                null,
+                null,
+                COL_ID + " ASC",
+                "1"
+        );
+
+        if (cursor.moveToFirst()) {
+            contacto = new Contacto();
+            contacto.setIdContacto(cursor.getInt(cursor.getColumnIndexOrThrow(COL_ID)));
+            contacto.setIdUsuario(cursor.getInt(cursor.getColumnIndexOrThrow(COL_ID_USUARIO)));
+            contacto.setNombre(cursor.getString(cursor.getColumnIndexOrThrow(COL_NOMBRE)));
+            contacto.setTelefono(cursor.getString(cursor.getColumnIndexOrThrow(COL_TELEFONO)));
+            contacto.setTipoContacto(cursor.getString(cursor.getColumnIndexOrThrow(COL_TIPO_CONTACTO)));
+            contacto.setPrincipal(cursor.getInt(cursor.getColumnIndexOrThrow(COL_PRINCIPAL)) == 1);
+        }
+
         cursor.close();
         return contacto;
     }
@@ -79,20 +130,45 @@ public class ContactoDAO {
     public int modificarContacto(Contacto c) {
         SQLiteDatabase db = helper.getWritableDatabase();
 
+        if (c.isPrincipal()) {
+            desmarcarPrincipal(c.getIdUsuario());
+        }
+
         ContentValues valores = new ContentValues();
         valores.put(COL_NOMBRE, c.getNombre());
         valores.put(COL_TELEFONO, c.getTelefono());
         valores.put(COL_TIPO_CONTACTO, c.getTipoContacto());
         valores.put(COL_PRINCIPAL, c.isPrincipal() ? 1 : 0);
 
-        return db.update(TABLA, valores, COL_ID + " = ?",
-                new String[]{String.valueOf(c.getIdContacto())});
+        return db.update(
+                TABLA,
+                valores,
+                COL_ID + " = ?",
+                new String[]{String.valueOf(c.getIdContacto())}
+        );
     }
 
     public int eliminarContacto(Contacto c) {
         SQLiteDatabase db = helper.getWritableDatabase();
 
-        return db.delete(TABLA, COL_ID + " = ?",
-                new String[]{String.valueOf(c.getIdContacto())});
+        return db.delete(
+                TABLA,
+                COL_ID + " = ?",
+                new String[]{String.valueOf(c.getIdContacto())}
+        );
+    }
+
+    private void desmarcarPrincipal(int idUsuario) {
+        SQLiteDatabase db = helper.getWritableDatabase();
+
+        ContentValues valores = new ContentValues();
+        valores.put(COL_PRINCIPAL, 0);
+
+        db.update(
+                TABLA,
+                valores,
+                COL_ID_USUARIO + " = ?",
+                new String[]{String.valueOf(idUsuario)}
+        );
     }
 }
