@@ -18,8 +18,11 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 import dao.BebeDAO;
+import dao.RecordatorioDAO;
+import dao.VacunaDAO;
 
 public class FormularioBebeFragment extends DialogFragment {
 
@@ -123,6 +126,7 @@ public class FormularioBebeFragment extends DialogFragment {
 
         if(resultado != -1)
         {
+            generarRecordatoriosVacunas(bebe, (int) resultado);
             Toast.makeText(requireContext(), "El bebe fue registrado correctamente", Toast.LENGTH_SHORT).show();
             if(listener != null)
             {
@@ -133,6 +137,32 @@ public class FormularioBebeFragment extends DialogFragment {
         else
         {
             Toast.makeText(requireContext(), "Error al registrar al bebe", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+
+    private void generarRecordatoriosVacunas(Bebe bebe, int idBebe)
+    {
+        VacunaDAO vacunaDAO = new VacunaDAO(requireContext());
+        RecordatorioDAO recordatorioDAO = new RecordatorioDAO(requireContext());
+
+        ArrayList<Vacuna> vacunas = vacunaDAO.obtenerVacunas();
+
+        for(Vacuna vacuna : vacunas)
+        {
+            LocalDate fechaVacuna = bebe.getFechaNacimiento().plusMonths(vacuna.getEdadAplicacion());
+
+            Recordatorio recordatorio = new Recordatorio();
+
+            recordatorio.setIdBebe(idBebe);
+            recordatorio.setIdVacuna(vacuna.getIdVacuna());
+            recordatorio.setTipo(TipoRecordatorio.VACUNA);
+            recordatorio.setFecha(fechaVacuna);
+            recordatorio.setDescripcion(vacuna.getNombre());
+            recordatorio.setEstado(EstadoRecordatorio.PENDIENTE);
+
+            recordatorioDAO.insertarRecordatorio(recordatorio);
         }
 
     }
