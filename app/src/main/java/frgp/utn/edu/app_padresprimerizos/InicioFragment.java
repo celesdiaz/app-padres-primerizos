@@ -64,7 +64,13 @@ public class InicioFragment extends Fragment {
             view.findViewById(R.id.btn_admin_guardias)
                     .setOnClickListener(v -> mostrarPendiente("Administrar guardias"));
             view.findViewById(R.id.btn_admin_directorio)
-                    .setOnClickListener(v -> mostrarPendiente("Administrar directorio"));
+                    .setOnClickListener(v ->
+                            requireActivity().getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .setReorderingAllowed(true)
+                                    .replace(R.id.contenedor_fragments, new AdminServicioFragment())
+                                    .addToBackStack(null)
+                                    .commit());
             view.findViewById(R.id.btn_admin_vacunas)
                     .setOnClickListener(v -> mostrarPendiente("Administrar vacunas"));
         }

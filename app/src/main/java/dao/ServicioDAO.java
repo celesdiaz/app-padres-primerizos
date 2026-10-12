@@ -65,6 +65,9 @@ public class ServicioDAO {
 
         String id = String.valueOf(s.getIdServicio());
 
+        // primero los favoritos que apuntan a este servicio
+        db.delete("Favoritos", "id_servicio = ?", new String[]{id});
+
         return db.delete(TABLA, COL_ID + " = ?", new String[]{id});
     }
 
