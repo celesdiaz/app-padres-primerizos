@@ -1,64 +1,90 @@
 package frgp.utn.edu.app_padresprimerizos;
 
+import android.app.DatePickerDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
+import android.widget.TextView;
+import android.widget.Toast;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link FormularioControlMedicoFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class FormularioControlMedicoFragment extends Fragment {
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputEditText;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+import java.time.LocalDate;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+import dao.BebeDAO;
+import dao.RecordatorioDAO;
 
-    public FormularioControlMedicoFragment() {
-        // Required empty public constructor
+public class FormularioControlMedicoFragment extends DialogFragment {
+
+    private TextView txtBebeControl;
+    private TextInputEditText edtFechaControl;
+    private TextInputEditText edtDescripcionControl;
+    private MaterialButton btnGuardarControl;
+    private MaterialButton btnCancelarControl;
+    private LocalDate fechaControlSeleccionada;
+    private Bebe bebe;
+
+    public FormularioControlMedicoFragment()
+    {
+
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FormularioControlMedicoFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static FormularioControlMedicoFragment newInstance(String param1, String param2) {
-        FormularioControlMedicoFragment fragment = new FormularioControlMedicoFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    public void setBebe(Bebe bebe)
+    {
+        this.bebe = bebe;
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
+        View view = inflater.inflate(R.layout.fragment_formulario_control_medico, container, false);
+
+        txtBebeControl = view.findViewById(R.id.txt_bebe_control);
+        edtFechaControl = view.findViewById(R.id.edt_fecha_control);
+        edtFechaControl.setOnClickListener(v -> mostrarCalendarioControl());
+
+        edtDescripcionControl = view.findViewById(R.id.edt_descripcion_control);
+        btnGuardarControl = view.findViewById(R.id.btn_guardar_control);
+
+        btnCancelarControl = view.findViewById(R.id.btn_cancelar_control);
+
+        txtBebeControl.setText("Bebé: " + bebe.getNombre());
+
+        btnCancelarControl.setOnClickListener(v -> dismiss());
+
+
+        return view;
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_formulario_control_medico, container, false);
+
+
+    private void mostrarCalendarioControl ()
+    {
+        LocalDate fechaActual = LocalDate.now();
+
+        DatePickerDialog calendario = new DatePickerDialog(requireContext(),
+                (DatePicker view, int year, int month, int day) ->
+                {
+                    fechaControlSeleccionada = LocalDate.of(year, month + 1, day);
+                    String fechaTexto = day + "/" + (month + 1) + "/" + year;
+                    edtFechaControl.setText(fechaTexto);
+                },
+                fechaActual.getYear(),
+                fechaActual.getMonthValue() -1,
+                fechaActual.getDayOfMonth()
+        );
+
+        calendario.show();
     }
+
+
 }
