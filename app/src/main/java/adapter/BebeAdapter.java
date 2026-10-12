@@ -18,6 +18,7 @@ import frgp.utn.edu.app_padresprimerizos.R;
 public class BebeAdapter extends RecyclerView.Adapter<BebeAdapter.BebeViewHolder> {
     private ArrayList<Bebe> bebes;
     private OnRegistrarControlListener listener;
+    private OnEliminarBebeListener listenerEliminar;
 
     public interface OnRegistrarControlListener
     {
@@ -31,6 +32,17 @@ public class BebeAdapter extends RecyclerView.Adapter<BebeAdapter.BebeViewHolder
 
     public BebeAdapter(ArrayList<Bebe> bebes) {
         this.bebes = bebes;
+    }
+
+
+    public interface OnEliminarBebeListener
+    {
+        void onEliminarBebe(Bebe bebe);
+    }
+
+    public void setOnEliminarBebeListener(OnEliminarBebeListener listenerEliminar)
+    {
+        this.listenerEliminar = listenerEliminar;
     }
 
     @Override
@@ -81,6 +93,19 @@ public class BebeAdapter extends RecyclerView.Adapter<BebeAdapter.BebeViewHolder
                     }
                 }
         );
+
+
+        holder.btnEliminarBebe.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(listenerEliminar != null)
+                        {
+                            listenerEliminar.onEliminarBebe(bebe);
+                        }
+                    }
+                }
+        );
     }
 
     @Override
@@ -90,7 +115,7 @@ public class BebeAdapter extends RecyclerView.Adapter<BebeAdapter.BebeViewHolder
 
     public static class BebeViewHolder extends RecyclerView.ViewHolder {
         TextView txtNombreBebe, txtEdadBebe, txtFechaBebe;
-        MaterialButton btnRegistrarControl;
+        MaterialButton btnRegistrarControl, btnEliminarBebe;
 
         public BebeViewHolder(View itemView) {
             super(itemView);
@@ -99,6 +124,7 @@ public class BebeAdapter extends RecyclerView.Adapter<BebeAdapter.BebeViewHolder
             txtFechaBebe = itemView.findViewById(R.id.txt_fecha_bebe);
 
             btnRegistrarControl = itemView.findViewById(R.id.btn_registrar_control);
+            btnEliminarBebe = itemView.findViewById(R.id.btn_eliminar_bebe);
 
         }
     }

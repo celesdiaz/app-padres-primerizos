@@ -1,5 +1,6 @@
 package frgp.utn.edu.app_padresprimerizos;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -96,6 +97,30 @@ public class MiBebeFragment extends Fragment {
                 }
         );
 
+
+        bebeAdapter.setOnEliminarBebeListener(new BebeAdapter.OnEliminarBebeListener() {
+            @Override
+            public void onEliminarBebe(Bebe bebe) {
+                confirmarEliminarBebe(bebe);
+            }
+        });
+
         recyclerView.setAdapter(bebeAdapter);
+    }
+
+
+    private void confirmarEliminarBebe(Bebe bebe)
+    {
+        new AlertDialog.Builder(getContext())
+                .setTitle("Eliminar Bebé")
+                .setMessage("¿Está seguro de que desea eliminar a " + bebe.getNombre() + "?")
+                .setPositiveButton("Eliminar", (dialog, which) -> {
+                    BebeDAO bebeDAO = new BebeDAO(requireContext());
+                    bebeDAO.eliminarBebe(bebe);
+                    cargarBebes();
+                    Toast.makeText(requireContext(), "Bebé eliminado", Toast.LENGTH_SHORT).show();
+                })
+                .setNegativeButton("Cancelar", null)
+                .show();
     }
 }

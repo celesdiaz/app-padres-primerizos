@@ -77,4 +77,14 @@ public class BebeDAO {
 
         return listaBebes;
     }
+
+
+    public int eliminarBebe(Bebe b) {
+        SQLiteDatabase db = helper.getWritableDatabase();
+
+        db.delete("Recordatorios", "id_bebe = ?", new String[]{String.valueOf(b.getIdBebe())});
+
+        return db.delete(TABLA, COL_ID + " = ?",
+                new String[]{String.valueOf(b.getIdBebe())});
+    }
 }
