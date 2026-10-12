@@ -38,12 +38,12 @@ public class GuardiasFragment extends Fragment {
 
         dao = new GuardiaDAO(requireContext());
 
-        ArrayList<Guardia> lista = dao.obtenerActivas(null);
-
-        if (lista.isEmpty()) {
-            cargarGuardiasDePrueba();
-            lista = dao.obtenerActivas(null);
+        // carga inicial: solo si la tabla no tiene ninguna guardia
+        if (dao.estaVacia()) {
+            cargarCronograma();
         }
+
+        ArrayList<Guardia> lista = dao.obtenerActivas(null);
 
         adapter = new ListViewGuardiaAdapter(requireContext(), lista);
         listView.setAdapter(adapter);
@@ -84,21 +84,43 @@ public class GuardiasFragment extends Fragment {
         }
     }
 
-    private void cargarGuardiasDePrueba() {
-        dao.insertar(crearGuardia(TipoGuardia.FARMACEUTICA, "Farmacia Del Sol", "Mitre 120", "11 4455-1111", "20 a 8 hs"));
-        dao.insertar(crearGuardia(TipoGuardia.FARMACEUTICA, "Farmacia Central", "Belgrano 450", "11 4455-2222", "22 a 8 hs"));
-        dao.insertar(crearGuardia(TipoGuardia.MEDICA, "Clínica Norte", "Av. Libertador 1200", "11 4455-3333", "Las 24 hs"));
-        dao.insertar(crearGuardia(TipoGuardia.MEDICA, "Sanatorio San José", "Sarmiento 800", "11 4455-4444", "Las 24 hs"));
+    // Farmacias de turno de Tigre: 11/10/2026 8:30 a 12/10/2026 8:30
+    // Fuente: https://www.tigre.gob.ar/salud/farmacias (datos del Colegio de Farmacéuticos)
+    private void cargarCronograma() {
+        LocalDate fecha = LocalDate.of(2026, 10, 11);
+        String horario = "8:30 a 8:30";
+
+        dao.insertar(crearGuardia(TipoGuardia.FARMACEUTICA, "Farmacia Pacheco Norte",
+                "Boulogne Sur Mer y Alberdi, Gral. Pacheco", "4736-1510", horario, fecha));
+        dao.insertar(crearGuardia(TipoGuardia.FARMACEUTICA, "Farmacia Agnes",
+                "Av. Hipólito Yrigoyen 1655, El Talar", "4740-5424", horario, fecha));
+        dao.insertar(crearGuardia(TipoGuardia.FARMACEUTICA, "Farmacia Costanera",
+                "Agustín García 8020, Rincón de Milberg", "4871-5666", horario, fecha));
+        dao.insertar(crearGuardia(TipoGuardia.FARMACEUTICA, "Farmacia Científica Arata y España",
+                "Arata y España, Don Torcuato", "4748-3594", horario, fecha));
+        dao.insertar(crearGuardia(TipoGuardia.FARMACEUTICA, "Farmacia Lecumberry",
+                "Ruta 197 y Balcarce, Los Troncos del Talar", "4715-0380", horario, fecha));
+        dao.insertar(crearGuardia(TipoGuardia.FARMACEUTICA, "Farmacia Molina",
+                "Av. Juan Domingo Perón y Chilavert, Benavidez", "03327-481340", horario, fecha));
+        dao.insertar(crearGuardia(TipoGuardia.FARMACEUTICA, "Misana Farmacias Alto Brickell",
+                "Luis García 1370 Local 2 y 3, Tigre", "11-5385-7486", horario, fecha));
+
+        // Datos de ejemplo (no reales) para poder probar el filtro de guardias médicas
+        dao.insertar(crearGuardia(TipoGuardia.MEDICA, "Clínica Norte",
+                "Av. Libertador 1200", "11 4455-3333", "Las 24 hs", fecha));
+        dao.insertar(crearGuardia(TipoGuardia.MEDICA, "Sanatorio San José",
+                "Sarmiento 800", "11 4455-4444", "Las 24 hs", fecha));
     }
 
-    private Guardia crearGuardia(TipoGuardia tipo, String nombre, String ubicacion, String telefono, String horario) {
+    private Guardia crearGuardia(TipoGuardia tipo, String nombre, String ubicacion,
+                                 String telefono, String horario, LocalDate fecha) {
         Guardia guardia = new Guardia();
         guardia.setTipo(tipo);
         guardia.setNombre(nombre);
         guardia.setUbicacion(ubicacion);
         guardia.setTelefono(telefono);
         guardia.setHorario(horario);
-        guardia.setFechaGuardia(LocalDate.now());
+        guardia.setFechaGuardia(fecha);
         return guardia;
     }
 }

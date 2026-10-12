@@ -62,7 +62,13 @@ public class InicioFragment extends Fragment {
         if (ROL_ADMIN.equals(rol)) {
             view.findViewById(R.id.layout_admin).setVisibility(View.VISIBLE);
             view.findViewById(R.id.btn_admin_guardias)
-                    .setOnClickListener(v -> mostrarPendiente("Administrar guardias"));
+                    .setOnClickListener(v ->
+                            requireActivity().getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .setReorderingAllowed(true)
+                                    .replace(R.id.contenedor_fragments, new AdminGuardiaFragment())
+                                    .addToBackStack(null)
+                                    .commit());
             view.findViewById(R.id.btn_admin_directorio)
                     .setOnClickListener(v ->
                             requireActivity().getSupportFragmentManager()

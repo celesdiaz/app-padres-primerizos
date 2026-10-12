@@ -121,6 +121,55 @@ public class GuardiaDAO {
         return guardia;
     }
 
+    // Todas las guardias (para el admin), de la fecha más reciente a la más antigua
+    public ArrayList<Guardia> obtenerTodas() {
+        SQLiteDatabase db = helper.getReadableDatabase();
+        ArrayList<Guardia> listaGuardias = new ArrayList<>();
+
+        Cursor gcursor = db.query(TABLA, COLUMNAS, null, null,
+                null, null, COL_FECHA + " DESC, " + COL_NOMBRE + " ASC");
+
+        if (gcursor.moveToFirst()) {
+            do {
+                listaGuardias.add(armarGuardia(gcursor));
+            } while (gcursor.moveToNext());
+        }
+
+        gcursor.close();
+        return listaGuardias;
+    }
+
+    // Guardias de una fecha puntual (para el admin)
+    public ArrayList<Guardia> obtenerPorFecha(LocalDate fecha) {
+        SQLiteDatabase db = helper.getReadableDatabase();
+        ArrayList<Guardia> listaGuardias = new ArrayList<>();
+
+        Cursor gcursor = db.query(TABLA, COLUMNAS, COL_FECHA + " = ?",
+                new String[]{fecha.toString()},
+                null, null, COL_TIPO + " ASC, " + COL_NOMBRE + " ASC");
+
+        if (gcursor.moveToFirst()) {
+            do {
+                listaGuardias.add(armarGuardia(gcursor));
+            } while (gcursor.moveToNext());
+        }
+
+        gcursor.close();
+        return listaGuardias;
+    }
+
+    // true si la tabla no tiene ninguna guardia (para la carga inicial)
+    public boolean estaVacia() {
+        SQLiteDatabase db = helper.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLA, null);
+        cursor.moveToFirst();
+        int cantidad = cursor.getInt(0);
+        cursor.close();
+
+        return cantidad == 0;
+    }
+
     private Guardia armarGuardia(Cursor c) {
         Guardia g = new Guardia();
         g.setIdGuardia(c.getInt(0));
