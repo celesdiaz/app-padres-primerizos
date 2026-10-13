@@ -38,15 +38,28 @@ public class UsuarioDAO {
     }
 
 
+    // true si ya hay un usuario registrado con ese email
+    public boolean existeEmail(String email) {
+        SQLiteDatabase db = helper.getReadableDatabase();
+
+        Cursor cursor = db.query(TABLA, new String[]{COL_ID}, COL_EMAIL + " = ?",
+                new String[]{email}, null, null, null);
+
+        boolean existe = cursor.getCount() > 0;
+        cursor.close();
+
+        return existe;
+    }
+
     public int iniciarSesion(Usuario usuario)
     {
         SQLiteDatabase db = helper.getReadableDatabase();
 
         String emailLogin = usuario.getEmail();
         String contrasenaLogin = usuario.getContrasena();
-        String query = "SELECT id_usuario, nombre, rol FROM Usuarios " + "WHERE email = '" + emailLogin + "' " + "AND contrasena = '" + contrasenaLogin + "' ";
+        String query = "SELECT id_usuario, nombre, rol FROM Usuarios WHERE email = ? AND contrasena = ?";
 
-        Cursor cursor = db.rawQuery(query, null);
+        Cursor cursor = db.rawQuery(query, new String[]{emailLogin, contrasenaLogin});
 
         int idUsuario = -1;
 

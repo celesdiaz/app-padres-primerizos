@@ -65,9 +65,14 @@ public class ContactosFragment extends Fragment implements ContactoAdapter.OnCon
 
     @Override
     public void onEliminar(Contacto contacto) {
+        String mensaje = "¿Estás seguro que querés eliminar a " + contacto.getNombre() + "?";
+        if (contacto.isPrincipal()) {
+            mensaje += "\n\nEs tu contacto principal: sin él, el SOS no tendrá a quién llamar.";
+        }
+
         new AlertDialog.Builder(getContext())
                 .setTitle("Eliminar contacto")
-                .setMessage("¿Estás seguro que querés eliminar a " + contacto.getNombre() + "?")
+                .setMessage(mensaje)
                 .setPositiveButton("Eliminar", (dialog, which) -> {
                     contactoDAO.eliminarContacto(contacto);
                     cargarContactos();

@@ -83,6 +83,9 @@ public class RegistroActivity extends AppCompatActivity {
             if (!Patterns.EMAIL_ADDRESS.matcher(edtEmail.getText().toString().trim()).matches()) {
                 edtEmail.setError("Correo invalido");
                 estado = false;
+            } else if (usuarioDAO.existeEmail(edtEmail.getText().toString().trim())) {
+                edtEmail.setError("Este correo ya está registrado");
+                estado = false;
             }
         }
 
@@ -96,6 +99,9 @@ public class RegistroActivity extends AppCompatActivity {
             } else {
                 if (edtContrasena.getText().toString().contains(" ")) {
                     edtContrasena.setError("La contraseña no puede contener espacios");
+                    estado = false;
+                } else if (!tieneLetraYNumero(edtContrasena.getText().toString())) {
+                    edtContrasena.setError("Debe incluir al menos una letra y un número");
                     estado = false;
                 }
             }
@@ -112,6 +118,22 @@ public class RegistroActivity extends AppCompatActivity {
         }
 
         return estado;
+    }
+
+    // complejidad mínima: al menos una letra y un número
+    private boolean tieneLetraYNumero(String texto) {
+        boolean hayLetra = false;
+        boolean hayNumero = false;
+
+        for (char c : texto.toCharArray()) {
+            if (Character.isLetter(c)) {
+                hayLetra = true;
+            } else if (Character.isDigit(c)) {
+                hayNumero = true;
+            }
+        }
+
+        return hayLetra && hayNumero;
     }
 
     public void eventoRegistrar(View view) {

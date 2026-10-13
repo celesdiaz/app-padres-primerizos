@@ -1,5 +1,6 @@
 package frgp.utn.edu.app_padresprimerizos;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -86,6 +87,37 @@ public class FormularioContactoFragment extends DialogFragment {
             return;
         }
 
+        if (!telefonoValido(telefono)) {
+            etTelefono.setError("Teléfono inválido: usá solo números (entre 8 y 15 dígitos)");
+            return;
+        }
+
+        // Si era el contacto principal y se lo desmarca, se avisa que no quedará ninguno
+        if (contactoEditar != null && contactoEditar.isPrincipal() && !esPrincipal) {
+            new AlertDialog.Builder(requireContext())
+                    .setTitle("Sin contacto principal")
+                    .setMessage("No quedará ningún contacto principal definido ¿Querés continuar?")
+                    .setPositiveButton("Continuar", (dialog, which) ->
+                            aplicarGuardado(nombre, telefono, tipoContacto, esPrincipal))
+                    .setNegativeButton("Cancelar", null)
+                    .show();
+            return;
+        }
+
+        aplicarGuardado(nombre, telefono, tipoContacto, esPrincipal);
+    }
+
+    // solo números, espacios, guiones, paréntesis y un + inicial (de 8 a 15 dígitos)
+    private boolean telefonoValido(String telefono) {
+        if (!telefono.matches("[+]?[0-9 ()\\-]+")) {
+            return false;
+        }
+
+        int digitos = telefono.replaceAll("[^0-9]", "").length();
+        return digitos >= 8 && digitos <= 15;
+    }
+
+    private void aplicarGuardado(String nombre, String telefono, String tipoContacto, boolean esPrincipal) {
         if (contactoEditar != null) {
             // Editar
             contactoEditar.setNombre(nombre);

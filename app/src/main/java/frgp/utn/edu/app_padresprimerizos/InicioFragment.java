@@ -126,7 +126,13 @@ public class InicioFragment extends Fragment {
         Contacto contactoPrincipal = contactoDAO.obtenerContactoPrincipal(idUsuario);
 
         if (contactoPrincipal == null) {
-            Toast.makeText(requireContext(), "No hay un contacto principal configurado", Toast.LENGTH_SHORT).show();
+            // RF8: sin contacto principal se ofrece ir a registrar uno
+            new AlertDialog.Builder(requireContext())
+                    .setTitle("Sin contacto principal")
+                    .setMessage("No hay un contacto principal configurado. ¿Querés registrar uno ahora?")
+                    .setPositiveButton("Sí", (dialog, which) -> irA(R.id.nav_contactos))
+                    .setNegativeButton("Cancelar", null)
+                    .show();
             return;
         }
 

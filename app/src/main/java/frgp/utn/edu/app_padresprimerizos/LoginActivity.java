@@ -106,7 +106,15 @@ public class LoginActivity extends AppCompatActivity {
         }
         else
         {
-            Toast.makeText(this, "Usuario no encontrado", Toast.LENGTH_SHORT).show();
+            // se distingue el motivo: email inexistente o contraseña incorrecta
+            if (!usuarioDAO.existeEmail(emailLogin))
+            {
+                edtEmailLogin.setError("El correo no está registrado");
+            }
+            else
+            {
+                edtContrasenaLogin.setError("Contraseña incorrecta");
+            }
         }
 
     }
