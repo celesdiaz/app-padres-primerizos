@@ -25,6 +25,7 @@ import dao.BebeDAO;
 public class MiBebeFragment extends Fragment {
 
     private MaterialButton btnAgregarBebe;
+    private MaterialButton btnCalendario;
     private RecyclerView recyclerView;
     private BebeAdapter bebeAdapter;
     private ArrayList<Bebe> bebes;
@@ -41,8 +42,9 @@ public class MiBebeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_mi_bebe, container, false);
 
         btnAgregarBebe = view.findViewById(R.id.btn_agregar_bebe);
-        recyclerView = view.findViewById(R.id.recycler_bebes);
+        btnCalendario = view.findViewById(R.id.btn_calendario);
 
+        recyclerView = view.findViewById(R.id.recycler_bebes);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
         cargarBebes();
@@ -65,6 +67,9 @@ public class MiBebeFragment extends Fragment {
                     "FormularioBebe"
             );
         });
+
+
+        btnCalendario.setOnClickListener(v -> {getParentFragmentManager().beginTransaction().replace(R.id.contenedor_fragments, new CalendarioFragment()).commit();});
 
         return view;
     }
