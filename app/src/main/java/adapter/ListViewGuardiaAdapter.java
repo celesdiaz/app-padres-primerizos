@@ -61,7 +61,7 @@ public class ListViewGuardiaAdapter extends ArrayAdapter<Guardia> {
         Button btnVerUbicacion = view.findViewById(R.id.btnVerUbicacionGuardia);
 
         tvNombre.setText(guardia.getNombre());
-        tvTipo.setText(guardia.getTipo().name());
+        tvTipo.setText(guardia.getTipo().getEtiqueta());
         tvUbicacion.setText(guardia.getUbicacion());
         tvHorario.setText(guardia.getHorario());
 

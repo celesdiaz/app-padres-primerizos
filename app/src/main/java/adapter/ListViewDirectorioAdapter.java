@@ -61,7 +61,7 @@ public class ListViewDirectorioAdapter extends ArrayAdapter<Servicio> {
         Button btnVerUbicacion = view.findViewById(R.id.btnVerUbicacion);
 
         tvNombre.setText(servicio.getNombre());
-        tvTipo.setText(servicio.getTipo().name());
+        tvTipo.setText(servicio.getTipo().getEtiqueta());
         tvUbicacion.setText(servicio.getUbicacion());
         tvHorario.setText(servicio.getHorario());
 

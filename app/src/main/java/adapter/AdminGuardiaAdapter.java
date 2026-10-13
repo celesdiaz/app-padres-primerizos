@@ -52,7 +52,7 @@ public class AdminGuardiaAdapter extends ArrayAdapter<Guardia> {
         ImageButton btnEliminar = view.findViewById(R.id.btnEliminarGuardia);
 
         tvNombre.setText(guardia.getNombre());
-        tvTipo.setText(guardia.getTipo().name());
+        tvTipo.setText(guardia.getTipo().getEtiqueta());
 
         btnEditar.setOnClickListener(v -> listener.onEditarClick(guardia));
         btnEliminar.setOnClickListener(v -> listener.onEliminarClick(guardia));

@@ -74,8 +74,8 @@ public class GuardiaDAO {
         return db.delete(TABLA, COL_ID + " = ?", new String[]{id});
     }
 
-    // Guardias de hoy, tipo null = "Todas"
-    public ArrayList<Guardia> obtenerActivas(TipoGuardia tipo) {
+    // Guardias de hoy. tipo null = "Todas"; texto filtra por nombre o ubicación
+    public ArrayList<Guardia> obtenerActivas(TipoGuardia tipo, String texto) {
         SQLiteDatabase db = helper.getReadableDatabase();
         ArrayList<Guardia> listaGuardias = new ArrayList<>();
 
@@ -88,6 +88,12 @@ public class GuardiaDAO {
         if (tipo != null) {
             condiciones.add(COL_TIPO + " = ?");
             valores.add(tipo.name());
+        }
+
+        if (texto != null && !texto.trim().isEmpty()) {
+            condiciones.add("(" + COL_UBICACION + " LIKE ? OR " + COL_NOMBRE + " LIKE ?)");
+            valores.add("%" + texto.trim() + "%");
+            valores.add("%" + texto.trim() + "%");
         }
 
         String filtroSql = TextUtils.join(" AND ", condiciones);

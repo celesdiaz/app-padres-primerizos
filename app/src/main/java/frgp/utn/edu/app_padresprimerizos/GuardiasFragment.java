@@ -1,17 +1,22 @@
 package frgp.utn.edu.app_padresprimerizos;
 
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -23,6 +28,7 @@ public class GuardiasFragment extends Fragment {
 
     private ListView listView;
     private Spinner spinner;
+    private TextInputEditText etBuscador;
     private GuardiaDAO dao;
     private ListViewGuardiaAdapter adapter;
 
@@ -35,6 +41,7 @@ public class GuardiasFragment extends Fragment {
         View vista = inflater.inflate(R.layout.fragment_guardias, container, false);
         listView = vista.findViewById(R.id.listViewGuardias);
         spinner = vista.findViewById(R.id.spinnerTipoGuardia);
+        etBuscador = vista.findViewById(R.id.etBuscadorGuardia);
 
         dao = new GuardiaDAO(requireContext());
 
@@ -43,11 +50,24 @@ public class GuardiasFragment extends Fragment {
             cargarCronograma();
         }
 
-        ArrayList<Guardia> lista = dao.obtenerActivas(null);
+        ArrayList<Guardia> lista = dao.obtenerActivas(null, "");
 
         adapter = new ListViewGuardiaAdapter(requireContext(), lista);
         listView.setAdapter(adapter);
         listView.setEmptyView(vista.findViewById(R.id.tvSinGuardias));
+
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            Guardia guardia = adapter.getItem(position);
+            Bundle args = new Bundle();
+            args.putInt("idGuardia", guardia.getIdGuardia());
+
+            requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .setReorderingAllowed(true)
+                    .replace(R.id.contenedor_fragments, FichaGuardiaFragment.class, args)
+                    .addToBackStack(null)
+                    .commit();
+        });
 
         String[] opciones = {"Todas", "Médica", "Farmacéutica"};
         ArrayAdapter<String> adapterTipo = new ArrayAdapter<>(requireContext(),
@@ -66,14 +86,28 @@ public class GuardiasFragment extends Fragment {
             public void onNothingSelected(AdapterView<?> parent) { }
         });
 
+        // se filtra al tocar la tecla de busqueda del teclado
+        etBuscador.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                boolean handled = false;
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    actualizarLista();
+                    handled = true;
+                }
+                return handled;
+            }
+        });
+
         return vista;
     }
 
     private void actualizarLista() {
         TipoGuardia tipo = tipoSeleccionado(spinner.getSelectedItemPosition());
+        String texto = etBuscador.getText().toString();
 
         adapter.clear();
-        adapter.addAll(dao.obtenerActivas(tipo));
+        adapter.addAll(dao.obtenerActivas(tipo, texto));
     }
 
     private TipoGuardia tipoSeleccionado(int posicion) {

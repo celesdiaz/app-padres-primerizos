@@ -60,7 +60,7 @@ public class FichaServicioFragment extends Fragment {
             return vista;
         }
         ((TextView) vista.findViewById(R.id.tvNombre)).setText(servicio.getNombre());
-        ((TextView) vista.findViewById(R.id.tvTipo)).setText(servicio.getTipo().name());
+        ((TextView) vista.findViewById(R.id.tvTipo)).setText(servicio.getTipo().getEtiqueta());
         ((TextView) vista.findViewById(R.id.tvTelefono)).setText(servicio.getTelefono());
         ((TextView) vista.findViewById(R.id.tvUbicacion)).setText(servicio.getUbicacion());
         ((TextView) vista.findViewById(R.id.tvHorario)).setText(servicio.getHorario());

@@ -48,7 +48,7 @@ public class AdminServicioAdapter extends ArrayAdapter<Servicio> {
         ImageButton btnEliminar = view.findViewById(R.id.btnEliminarServicio);
 
         tvNombre.setText(servicio.getNombre());
-        tvTipo.setText(servicio.getTipo().name());
+        tvTipo.setText(servicio.getTipo().getEtiqueta());
 
         btnEditar.setOnClickListener(v -> listener.onEditarClick(servicio));
         btnEliminar.setOnClickListener(v -> listener.onEliminarClick(servicio));
