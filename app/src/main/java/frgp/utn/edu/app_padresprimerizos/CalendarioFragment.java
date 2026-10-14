@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
@@ -33,6 +34,8 @@ public class CalendarioFragment extends Fragment {
     private ArrayList<Recordatorio> listaRecordatorios;
     private RecordatorioAdapter recordatorioAdapter;
     private Bebe bebeSeleccionado;
+    private TextView txtVacio;
+    private TextView txtSeleccionarBebe;
 
     public CalendarioFragment() {
         // Required empty public constructor
@@ -47,6 +50,9 @@ public class CalendarioFragment extends Fragment {
         spinnerBebe = view.findViewById(R.id.spinner_bebe);
         recyclerRecordatorios = view.findViewById(R.id.recycler_recordatorios);
         btnPerfiles = view.findViewById(R.id.btn_perfiles);
+        txtVacio = view.findViewById(R.id.txt_calendario_vacio);
+        txtSeleccionarBebe = view.findViewById(R.id.txt_seleccionar_bebe);
+
         btnPerfiles.setOnClickListener(v -> {getParentFragmentManager().beginTransaction().replace(R.id.contenedor_fragments, new MiBebeFragment()).commit();});
 
         recyclerRecordatorios.setLayoutManager(new LinearLayoutManager(requireContext()));
@@ -71,6 +77,15 @@ public class CalendarioFragment extends Fragment {
         BebeDAO bebeDAO = new BebeDAO(requireContext());
 
         listaBebes = bebeDAO.obtenerBebesPorUsuario(idUsuario);
+
+        if (listaBebes.isEmpty()) {
+            spinnerBebe.setVisibility(View.GONE);
+            txtSeleccionarBebe.setVisibility(View.GONE);
+            mostrarMensaje("No tenés ningún bebé registrado. Agregá uno desde Perfiles.");
+            return;
+        }
+
+        spinnerBebe.setVisibility(View.VISIBLE);
 
         ArrayList<String> nombresBebes = new ArrayList<>();
 
@@ -103,6 +118,12 @@ public class CalendarioFragment extends Fragment {
         RecordatorioDAO recordatorioDAO = new RecordatorioDAO(requireContext());
         listaRecordatorios = recordatorioDAO.obtenerRecordatoriosPorBebe(idBebe);
 
+        if (listaRecordatorios.isEmpty()) {
+            mostrarMensaje("El calendario está vacío: este bebé todavía no tiene recordatorios.");
+        } else {
+            ocultarMensaje();
+        }
+
         recordatorioAdapter = new RecordatorioAdapter(listaRecordatorios);
         recordatorioAdapter.SetOnCumplirRecordatorioListener(new RecordatorioAdapter.OnCumplirRecordatorioListener() {
             @Override
@@ -122,6 +143,14 @@ public class CalendarioFragment extends Fragment {
         });
 
         recyclerRecordatorios.setAdapter(recordatorioAdapter);
+    }
+    private void mostrarMensaje(String mensaje) {
+        txtVacio.setText(mensaje);
+        txtVacio.setVisibility(View.VISIBLE);
+    }
+
+    private void ocultarMensaje() {
+        txtVacio.setVisibility(View.GONE);
     }
 
 }

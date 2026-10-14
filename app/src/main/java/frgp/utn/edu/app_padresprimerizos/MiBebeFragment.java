@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
@@ -29,6 +30,7 @@ public class MiBebeFragment extends Fragment {
     private RecyclerView recyclerView;
     private BebeAdapter bebeAdapter;
     private ArrayList<Bebe> bebes;
+    private TextView txtSinBebes;
 
     public MiBebeFragment()
     {
@@ -43,7 +45,7 @@ public class MiBebeFragment extends Fragment {
 
         btnAgregarBebe = view.findViewById(R.id.btn_agregar_bebe);
         btnCalendario = view.findViewById(R.id.btn_calendario);
-
+        txtSinBebes = view.findViewById(R.id.txt_sin_bebes);
         recyclerView = view.findViewById(R.id.recycler_bebes);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
 
@@ -88,6 +90,12 @@ public class MiBebeFragment extends Fragment {
         BebeDAO bebeDAO = new BebeDAO(requireContext());
 
         bebes = bebeDAO.obtenerBebesPorUsuario(idUsuario);
+
+        if (bebes.isEmpty()) {
+            txtSinBebes.setVisibility(View.VISIBLE);
+        } else {
+            txtSinBebes.setVisibility(View.GONE);
+        }
 
         bebeAdapter = new BebeAdapter(bebes);
 
