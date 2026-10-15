@@ -51,6 +51,8 @@ public class InicioFragment extends Fragment {
         // SOS
         view.findViewById(R.id.btn_sos).setOnClickListener(v -> confirmarSOS());
 
+        view.findViewById(R.id.btn_cerrar_sesion).setOnClickListener(v -> confirmarCerrarSesion());
+
         // Accesos rápidos
         view.findViewById(R.id.btn_calendario).setOnClickListener(v -> irA(R.id.nav_mibebe));
         view.findViewById(R.id.btn_directorio).setOnClickListener(v -> irA(R.id.nav_servicios));
@@ -108,6 +110,25 @@ public class InicioFragment extends Fragment {
                 .setPositiveButton("Sí", (dialog, which) -> activarSOS())
                 .setNegativeButton("Cancelar", null)
                 .show();
+    }
+
+    private void confirmarCerrarSesion() {
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Cerrar sesión")
+                .setMessage("¿Querés cerrar tu sesión?")
+                .setPositiveButton("Cerrar sesión", (dialog, which) -> cerrarSesion())
+                .setNegativeButton("Cancelar", null)
+                .show();
+    }
+
+    private void cerrarSesion() {
+        SharedPreferences prefs = requireContext()
+                .getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+        prefs.edit().clear().apply();
+
+        Intent intent = new Intent(requireContext(), LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 
     private void activarSOS() {
