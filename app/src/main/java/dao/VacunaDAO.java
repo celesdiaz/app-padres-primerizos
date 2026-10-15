@@ -24,6 +24,9 @@ public class VacunaDAO {
     }
 
     public ArrayList<Vacuna> obtenerVacunas() {
+        if (estaVacia()) {
+            cargarCalendarioInicial();
+        }
         SQLiteDatabase db = helper.getReadableDatabase();
 
         Cursor cursor = db.query(
@@ -99,5 +102,65 @@ public class VacunaDAO {
                 COL_ID + " = ?",
                 new String[]{String.valueOf(v.getIdVacuna())}
         );
+    }
+
+    // true si la tabla no tiene ninguna vacuna (para la carga inicial)
+    public boolean estaVacia() {
+        SQLiteDatabase db = helper.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLA, null);
+        cursor.moveToFirst();
+        int cantidad = cursor.getInt(0);
+        cursor.close();
+
+        return cantidad == 0;
+    }
+
+    // Calendario Nacional de Vacunación 2026 de 0 a 15 meses
+    private void cargarCalendarioInicial() {
+        // Recién nacido
+        agregar("BCG (dosis única)", 0);
+        agregar("Hepatitis B (dosis neonatal)", 0);
+
+        // 2 meses
+        agregar("Neumococo conjugada (1ª dosis)", 2);
+        agregar("Quíntuple o pentavalente (1ª dosis)", 2);
+        agregar("IPV - Polio (1ª dosis)", 2);
+        agregar("Rotavirus (1ª dosis)", 2);
+
+        // 3 meses
+        agregar("Meningococo ACWY (1ª dosis)", 3);
+
+        // 4 meses
+        agregar("Neumococo conjugada (2ª dosis)", 4);
+        agregar("Quíntuple o pentavalente (2ª dosis)", 4);
+        agregar("IPV - Polio (2ª dosis)", 4);
+        agregar("Rotavirus (2ª dosis)", 4);
+
+        // 5 meses
+        agregar("Meningococo ACWY (2ª dosis)", 5);
+
+        // 6 meses
+        agregar("Quíntuple o pentavalente (3ª dosis)", 6);
+        agregar("IPV - Polio (3ª dosis)", 6);
+        agregar("Antigripal (dosis anual)", 6);
+
+        // 12 meses
+        agregar("Neumococo conjugada (refuerzo)", 12);
+        agregar("Hepatitis A (dosis única)", 12);
+        agregar("Triple viral (1ª dosis)", 12);
+
+        // 15 meses
+        agregar("Meningococo ACWY (refuerzo)", 15);
+        agregar("Varicela (1ª dosis)", 15);
+        agregar("Triple viral (2ª dosis)", 15);
+        agregar("Quíntuple o pentavalente (1º refuerzo)", 15);
+    }
+
+    private void agregar(String nombre, int edadMeses) {
+        Vacuna v = new Vacuna();
+        v.setNombre(nombre);
+        v.setEdadAplicacion(edadMeses);
+        insertarVacuna(v);
     }
 }
