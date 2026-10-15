@@ -55,6 +55,10 @@ public class FichaGuardiaFragment extends Fragment {
 
         vista.findViewById(R.id.tvTelefonoFichaGuardia).setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_DIAL);
+            if (!guardia.getTelefono().matches(".*\\d.*")) {
+                Toast.makeText(requireContext(), "Teléfono no disponible", Toast.LENGTH_SHORT).show();
+                return;
+            }
             intent.setData(Uri.parse("tel:" + guardia.getTelefono()));
             if (intent.resolveActivity(requireContext().getPackageManager()) != null) {
                 startActivity(intent);

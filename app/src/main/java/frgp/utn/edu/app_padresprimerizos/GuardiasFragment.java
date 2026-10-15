@@ -118,43 +118,117 @@ public class GuardiasFragment extends Fragment {
         }
     }
 
-    // Farmacias de turno de Tigre: 11/10/2026 8:30 a 12/10/2026 8:30
-    // Fuente: https://www.tigre.gob.ar/salud/farmacias (datos del Colegio de Farmacéuticos)
+/// Farmacias de turno de San Fernando (Víctoria, Virreyes y San Fernando): octubre 2026
+// Fuente: Colegio de Farmacéuticos de San Fernando, https://colfarmasanfdo.org.ar/turnero.html
+// Los turnos comienzan a las 8:30 del día indicado y terminan a las 8:30 del día siguiente
     private void cargarCronograma() {
-        LocalDate fecha = LocalDate.of(2026, 10, 11);
-        String horario = "8:30 a 8:30";
-
-        dao.insertar(crearGuardia(TipoGuardia.FARMACEUTICA, "Farmacia Pacheco Norte",
-                "Boulogne Sur Mer y Alberdi, Gral. Pacheco", "4736-1510", horario, fecha));
-        dao.insertar(crearGuardia(TipoGuardia.FARMACEUTICA, "Farmacia Agnes",
-                "Av. Hipólito Yrigoyen 1655, El Talar", "4740-5424", horario, fecha));
-        dao.insertar(crearGuardia(TipoGuardia.FARMACEUTICA, "Farmacia Costanera",
-                "Agustín García 8020, Rincón de Milberg", "4871-5666", horario, fecha));
-        dao.insertar(crearGuardia(TipoGuardia.FARMACEUTICA, "Farmacia Científica Arata y España",
-                "Arata y España, Don Torcuato", "4748-3594", horario, fecha));
-        dao.insertar(crearGuardia(TipoGuardia.FARMACEUTICA, "Farmacia Lecumberry",
-                "Ruta 197 y Balcarce, Los Troncos del Talar", "4715-0380", horario, fecha));
-        dao.insertar(crearGuardia(TipoGuardia.FARMACEUTICA, "Farmacia Molina",
-                "Av. Juan Domingo Perón y Chilavert, Benavidez", "03327-481340", horario, fecha));
-        dao.insertar(crearGuardia(TipoGuardia.FARMACEUTICA, "Misana Farmacias Alto Brickell",
-                "Luis García 1370 Local 2 y 3, Tigre", "11-5385-7486", horario, fecha));
-
-        // Datos de ejemplo (no reales) para poder probar el filtro de guardias médicas
-        dao.insertar(crearGuardia(TipoGuardia.MEDICA, "Clínica Norte",
-                "Av. Libertador 1200", "11 4455-3333", "Las 24 hs", fecha));
-        dao.insertar(crearGuardia(TipoGuardia.MEDICA, "Sanatorio San José",
-                "Sarmiento 800", "11 4455-4444", "Las 24 hs", fecha));
+        turno("2026-10-01", "Antigua Andreu", "Constitución 1286, San Fernando");
+        turno("2026-10-01", "Del Virrey", "Avellaneda y Calle 4, Virreyes, San Fernando");
+        turno("2026-10-02", "Cimino", "C. Casares 3164, Victoria, San Fernando");
+        turno("2026-10-02", "Mitre", "Constitución 652, San Fernando");
+        turno("2026-10-03", "Grupo Fabole", "René Favaloro 3395, Victoria, San Fernando");
+        turno("2026-10-03", "Traynor", "Constitución 1000, San Fernando");
+        turno("2026-10-04", "Pacheco Virreyes", "Avellaneda 2899, Virreyes, San Fernando");
+        turno("2026-10-04", "Libertador 2200", "Perón 2302, Victoria, San Fernando");
+        turno("2026-10-05", "Negri", "Perón 2916, Victoria, San Fernando");
+        turno("2026-10-05", "Freire", "Avellaneda 4198, Virreyes, San Fernando");
+        turno("2026-10-06", "Santamarina", "Santamarina 1394, Victoria, San Fernando");
+        turno("2026-10-06", "Blejer", "C. Casares 3914, Victoria, San Fernando");
+        turno("2026-10-07", "Antigua Andreu", "Constitución 1286, San Fernando");
+        turno("2026-10-08", "Bustelo", "Perón 1801, San Fernando");
+        turno("2026-10-08", "Savini", "Sobremonte 299, San Fernando");
+        turno("2026-10-09", "Del Rosario", "Avellaneda 3401, Virreyes, San Fernando");
+        turno("2026-10-09", "Pacheco del Pueblo", "Necochea 1202, San Fernando");
+        turno("2026-10-10", "De María", "H. Yrigoyen 2098, San Fernando");
+        turno("2026-10-10", "Virreyes Central", "Avellaneda 5438, Virreyes, San Fernando");
+        turno("2026-10-11", "Canal San Fernando", "3 de Febrero y Colón, San Fernando");
+        turno("2026-10-11", "Iriondo 609", "Av. Libertador 3061, Victoria, San Fernando");
+        turno("2026-10-12", "Martín", "Perón 2498, Victoria, San Fernando");
+        turno("2026-10-12", "Contreras", "Avellaneda 3757, Virreyes, San Fernando");
+        turno("2026-10-13", "Melesi", "9 de Julio 1493, San Fernando");
+        turno("2026-10-14", "Pacheco San Fernando", "Constitución 201, San Fernando");
+        turno("2026-10-14", "Panamá", "Avellaneda 4810, Virreyes, San Fernando");
+        turno("2026-10-15", "Pelman", "Perón 3302, Victoria, San Fernando");
+        turno("2026-10-15", "Virrey Sobremonte", "Avellaneda 1899, Virreyes, San Fernando");
+        turno("2026-10-16", "Mastronardi", "Brandsen 2111, Virreyes, San Fernando");
+        turno("2026-10-16", "Bruno", "Bolloqui 190, Victoria, San Fernando");
+        turno("2026-10-17", "Otharan", "Belgrano 1964, San Fernando");
+        turno("2026-10-17", "Lässig", "Perón 406, San Fernando");
+        turno("2026-10-18", "Antigua Andreu", "Constitución 1286, San Fernando");
+        turno("2026-10-18", "Del Virrey", "Avellaneda y Calle 4, Virreyes, San Fernando");
+        turno("2026-10-19", "Cimino", "C. Casares 3164, Victoria, San Fernando");
+        turno("2026-10-19", "Mitre", "Constitución 652, San Fernando");
+        turno("2026-10-20", "Grupo Fabole", "René Favaloro 3395, Victoria, San Fernando");
+        turno("2026-10-20", "Traynor", "Constitución 1000, San Fernando");
+        turno("2026-10-21", "Pacheco Virreyes", "Avellaneda 2899, Virreyes, San Fernando");
+        turno("2026-10-21", "Libertador 2200", "Perón 2302, Victoria, San Fernando");
+        turno("2026-10-22", "Negri", "Perón 2916, Victoria, San Fernando");
+        turno("2026-10-22", "Freire", "Avellaneda 4198, Virreyes, San Fernando");
+        turno("2026-10-23", "Santamarina", "Santamarina 1394, Victoria, San Fernando");
+        turno("2026-10-23", "Blejer", "C. Casares 3914, Victoria, San Fernando");
+        turno("2026-10-24", "Antigua Andreu", "Constitución 1286, San Fernando");
+        turno("2026-10-25", "Bustelo", "Perón 1801, San Fernando");
+        turno("2026-10-25", "Savini", "Sobremonte 299, San Fernando");
+        turno("2026-10-26", "Del Rosario", "Avellaneda 3401, Virreyes, San Fernando");
+        turno("2026-10-26", "Pacheco del Pueblo", "Necochea 1202, San Fernando");
+        turno("2026-10-27", "De María", "H. Yrigoyen 2098, San Fernando");
+        turno("2026-10-27", "Virreyes Central", "Avellaneda 5438, Virreyes, San Fernando");
+        turno("2026-10-28", "Canal San Fernando", "3 de Febrero y Colón, San Fernando");
+        turno("2026-10-28", "Iriondo 609", "Av. Libertador 3061, Victoria, San Fernando");
+        turno("2026-10-29", "Martín", "Perón 2498, Victoria, San Fernando");
+        turno("2026-10-29", "Contreras", "Avellaneda 3757, Virreyes, San Fernando");
+        turno("2026-10-30", "Melesi", "9 de Julio 1493, San Fernando");
+        turno("2026-10-31", "Pacheco San Fernando", "Constitución 201, San Fernando");
+        turno("2026-10-31", "Panamá", "Avellaneda 4810, Virreyes, San Fernando");
+        turno("2026-11-01", "Pelman", "Perón 3302, Victoria, San Fernando");
+        turno("2026-11-01", "Virrey Sobremonte", "Avellaneda 1899, Virreyes, San Fernando");
     }
 
-    private Guardia crearGuardia(TipoGuardia tipo, String nombre, String ubicacion,
-                                 String telefono, String horario, LocalDate fecha) {
+    private void turno(String fecha, String nombre, String direccion) {
         Guardia guardia = new Guardia();
-        guardia.setTipo(tipo);
+        guardia.setTipo(TipoGuardia.FARMACEUTICA);
         guardia.setNombre(nombre);
-        guardia.setUbicacion(ubicacion);
-        guardia.setTelefono(telefono);
-        guardia.setHorario(horario);
-        guardia.setFechaGuardia(fecha);
-        return guardia;
+        guardia.setUbicacion(direccion);
+        guardia.setTelefono(telefonoDe(nombre));
+        guardia.setHorario("8:30 a 8:30");
+        guardia.setFechaGuardia(LocalDate.parse(fecha));
+        dao.insertar(guardia);
+    }
+
+    // Teléfonos del directorio del Colegio de Farmacéuticos de San Fernando
+    private String telefonoDe(String nombre) {
+        switch (nombre) {
+            case "Antigua Andreu": return "4580-0932";
+            case "Del Virrey": return "4549-6170";
+            case "Cimino": return "1144400043";
+            case "Mitre": return "4744-3132";
+            case "Grupo Fabole": return "1162823395";
+            case "Traynor": return "4744-6818";
+            case "Pacheco Virreyes": return "1131908047";
+            case "Libertador 2200": return "1164980438";
+            case "Negri": return "4745-3327";
+            case "Freire": return "4714-2542";
+            case "Santamarina": return "4549-0451";
+            case "Blejer": return "4725-0540";
+            case "Bustelo": return "4746-2045";
+            case "Savini": return "4745-1012";
+            case "Del Rosario": return "4744-8356";
+            case "Pacheco del Pueblo": return "1128969223";
+            case "De María": return "4706-8135";
+            case "Canal San Fernando": return "4744-7712";
+            case "Iriondo 609": return "1125956114";
+            case "Martín": return "1560769537";
+            case "Contreras": return "4714-2704";
+            case "Melesi": return "4580-0935";
+            case "Pacheco San Fernando": return "1141625485";
+            case "Panamá": return "4714-3770";
+            case "Pelman": return "4744-2852";
+            case "Virrey Sobremonte": return "4745-2022";
+            case "Mastronardi": return "4744-4185";
+            case "Bruno": return "4744-4511";
+            case "Otharan": return "1171886579";
+            case "Lässig": return "1141846780";
+            default: return "No informado";   // por ejemplo "Virreyes Central", que no figura en el directorio
+        }
     }
 }
