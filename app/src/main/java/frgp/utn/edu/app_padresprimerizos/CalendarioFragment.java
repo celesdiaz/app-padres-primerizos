@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import adapter.RecordatorioAdapter;
 import dao.BebeDAO;
 import dao.RecordatorioDAO;
+import dao.VacunaDAO;
 
 
 public class CalendarioFragment extends Fragment {
@@ -102,6 +103,7 @@ public class CalendarioFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 bebeSeleccionado = listaBebes.get(position);
+                generarRecordatoriosVacunasFaltantes(bebeSeleccionado);
                 cargarRecordatorios(bebeSeleccionado.getIdBebe());
             }
 
@@ -151,6 +153,45 @@ public class CalendarioFragment extends Fragment {
 
     private void ocultarMensaje() {
         txtVacio.setVisibility(View.GONE);
+    }
+
+
+    private void generarRecordatoriosVacunasFaltantes(Bebe bebe)
+    {
+        VacunaDAO vacunaDAO = new VacunaDAO(requireContext());
+        RecordatorioDAO recordatorioDAO = new RecordatorioDAO(requireContext());
+
+        ArrayList<Vacuna> listaVacunas = vacunaDAO.obtenerVacunas();
+        ArrayList<Recordatorio> listaRecordatorios = recordatorioDAO.obtenerRecordatoriosPorBebe(bebe.getIdBebe());
+
+        for(Vacuna vacuna : listaVacunas)
+        {
+            boolean existe = false;
+            for(Recordatorio recordatorio : listaRecordatorios)
+            {
+                if(recordatorio.getIdVacuna() != null && recordatorio.getIdVacuna().equals(vacuna.getIdVacuna()))
+                {
+                    existe = true;
+                    break;
+                }
+            }
+
+            if(!existe)
+            {
+                Recordatorio recordatorioNuevo = new Recordatorio();
+
+                recordatorioNuevo.setIdBebe(bebe.getIdBebe());
+                recordatorioNuevo.setIdVacuna(vacuna.getIdVacuna());
+                recordatorioNuevo.setTipo(TipoRecordatorio.VACUNA);
+                recordatorioNuevo.setFecha(bebe.getFechaNacimiento().plusMonths(vacuna.getEdadAplicacion()));
+                recordatorioNuevo.setDescripcion(vacuna.getNombre());
+                recordatorioNuevo.setEstado(EstadoRecordatorio.PENDIENTE);
+
+                recordatorioDAO.insertarRecordatorio(recordatorioNuevo);
+            }
+        }
+
+
     }
 
 }
