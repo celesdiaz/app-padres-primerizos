@@ -65,8 +65,7 @@ public class InicioFragment extends Fragment {
         view.findViewById(R.id.btn_contactos).setOnClickListener(v -> irA(R.id.nav_contactos));
 
         // Sección administrador
-        //if (ROL_ADMIN.equals(rol)) {
-            if (true) {
+        if (ROL_ADMIN.equals(rol)) {
             view.findViewById(R.id.layout_admin).setVisibility(View.VISIBLE);
 
             view.findViewById(R.id.btn_admin_guardias)
