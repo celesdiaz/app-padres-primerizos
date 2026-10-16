@@ -152,6 +152,7 @@ public class RegistroActivity extends AppCompatActivity {
         usuario.setApellido(apellido);
         usuario.setEmail(email);
         usuario.setContrasena(contrasena);
+        //usuario.setRol(Rol.ADMINISTRADOR);
 
         long resultado = usuarioDAO.insertarUsuario(usuario);
 
